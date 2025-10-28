@@ -263,7 +263,39 @@
         </div>
 
         <div class="upload-section">
-            <h2><i class="fas fa-users"></i> Upload Team Player Lists</h2>
+            <h2><i class="fas fa-users"></i> Add Players - Manual Entry</h2>
+            <p>Add players directly without uploading files. Perfect for quick updates!</p>
+            <div class="upload-form">
+                <div class="form-group">
+                    <label for="teamSelectManual">Select Team</label>
+                    <select id="teamSelectManual">
+                        <option value="">Select a team</option>
+                        <option value="RCB">Royal Challengers Bangalore (RCB)</option>
+                        <option value="MI">Mumbai Indians (MI)</option>
+                        <option value="CSK">Chennai Super Kings (CSK)</option>
+                        <option value="SRH">Sunrisers Hyderabad (SRH)</option>
+                        <option value="KXIP">Kings XI Punjab (KXIP)</option>
+                        <option value="KKR">Kolkata Knight Riders (KKR)</option>
+                        <option value="DC">Delhi Capitals (DC)</option>
+                        <option value="RR">Rajasthan Royals (RR)</option>
+                        <option value="GT">Gujarat Titans (GT)</option>
+                        <option value="LSG">Lucknow Super Giants (LSG)</option>
+                    </select>
+                </div>
+                <div id="playersList"></div>
+                <button class="btn" onclick="addPlayerRow()" style="margin-top: 1rem; background: linear-gradient(45deg, #28a745, #20c997);">
+                    <i class="fas fa-plus"></i> Add Player
+                </button>
+                <button class="btn" onclick="savePlayers()" style="margin-top: 1rem;">
+                    <i class="fas fa-save"></i> Save Players
+                </button>
+                <div class="success-message" id="playersManualSuccess"></div>
+                <div class="error-message" id="playersManualError"></div>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2><i class="fas fa-file-upload"></i> Upload Players from File (CSV)</h2>
             <p>Upload CSV files containing player lists for each team.</p>
             <div class="upload-form">
                 <div class="form-group">
@@ -453,18 +485,8 @@
                 
                 console.log(`Parsed ${parsedPlayers.length} players for ${team}`);
                 
-                successEl.innerHTML = `<i class="fas fa-check-circle"></i> Players for ${team} uploaded successfully! (${parsedPlayers.length} players loaded)<br><small>Data is now live and visible to all users!</small>`;
+                successEl.innerHTML = `<i class="fas fa-check-circle"></i> Players for ${team} uploaded successfully! (${parsedPlayers.length} players loaded)`;
                 successEl.style.display = 'block';
-                
-                // Trigger custom event so any open team pages can refresh
-                window.dispatchEvent(new CustomEvent('playersUploaded', { 
-                    detail: { team: team.toLowerCase(), count: parsedPlayers.length } 
-                }));
-                
-                // Auto-refresh the page after 2 seconds to show updated data
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
             } catch (error) {
                 showError('playersError', 'Upload failed: ' + error.message);
             }
@@ -506,6 +528,125 @@
             const errorEl = document.getElementById(elementId);
             errorEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
             errorEl.style.display = 'block';
+        }
+
+        // Manual player entry functions
+        let playerCount = 0;
+
+        function addPlayerRow() {
+            playerCount++;
+            const playersList = document.getElementById('playersList');
+            const row = document.createElement('div');
+            row.className = 'player-row';
+            row.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 1px solid rgba(255,255,255,0.1);';
+            row.id = `player-${playerCount}`;
+            
+            row.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: white; margin: 0;"><i class="fas fa-user"></i> Player ${playerCount}</h4>
+                    <button onclick="removePlayerRow(${playerCount})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Name</label>
+                        <input type="text" class="player-name" placeholder="Virat Kohli" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Role</label>
+                        <select class="player-role" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select role</option>
+                            <option value="Batsman">Batsman</option>
+                            <option value="Bowler">Bowler</option>
+                            <option value="All-rounder">All-rounder</option>
+                            <option value="Wicket-keeper">Wicket-keeper</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Age</label>
+                        <input type="number" class="player-age" placeholder="35" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Nationality</label>
+                        <input type="text" class="player-nationality" placeholder="Indian" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Batting Style</label>
+                        <select class="player-batting" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select style</option>
+                            <option value="Right-handed">Right-handed</option>
+                            <option value="Left-handed">Left-handed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Bowling Style</label>
+                        <input type="text" class="player-bowling" placeholder="Right-arm medium" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                </div>
+            `;
+            playersList.appendChild(row);
+        }
+
+        function removePlayerRow(id) {
+            const row = document.getElementById(`player-${id}`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        function savePlayers() {
+            const team = document.getElementById('teamSelectManual').value;
+            if (!team) {
+                showError('playersManualError', 'Please select a team');
+                return;
+            }
+
+            const playerRows = document.querySelectorAll('.player-row');
+            if (playerRows.length === 0) {
+                showError('playersManualError', 'Please add at least one player');
+                return;
+            }
+
+            const players = [];
+            playerRows.forEach(row => {
+                const player = {
+                    name: row.querySelector('.player-name')?.value || '',
+                    role: row.querySelector('.player-role')?.value || '',
+                    age: row.querySelector('.player-age')?.value || '',
+                    nationality: row.querySelector('.player-nationality')?.value || '',
+                    'batting style': row.querySelector('.player-batting')?.value || '',
+                    'bowling style': row.querySelector('.player-bowling')?.value || '',
+                    image: ''
+                };
+
+                if (player.name) {
+                    // Mark foreign players
+                    if (player.nationality && player.nationality.toLowerCase() !== 'indian' && player.nationality.toLowerCase() !== 'india') {
+                        player.isForeign = true;
+                    }
+                    players.push(player);
+                }
+            });
+
+            if (players.length === 0) {
+                showError('playersManualError', 'Please fill in at least the player name');
+                return;
+            }
+
+            // Store in localStorage
+            localStorage.setItem(`uploaded_${team.toLowerCase()}_players`, JSON.stringify(players));
+
+            // Show success
+            const successEl = document.getElementById('playersManualSuccess');
+            successEl.innerHTML = `<i class="fas fa-check-circle"></i> ${players.length} player(s) saved for ${team}!`;
+            successEl.style.display = 'block';
+
+            // Clear form
+            document.getElementById('playersList').innerHTML = '';
+            playerCount = 0;
+
+            console.log(`Saved ${players.length} players for ${team}`);
         }
     </script>
 </body>
