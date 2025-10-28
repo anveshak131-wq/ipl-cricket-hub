@@ -3,9 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>RR - IPL2026</title>
-	<link rel="icon" type="image/x-icon" href="rr_logo.png">
-	<style>
+	<title>RR - IPL 2026</title>
+	<link rel="shortcut icon" href="index.ico" />
+	<link rel="icon" type="image/x-icon" href="rr_logo_new.svg">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+	<style type="text/css">
 		* {
 			margin: 0;
 			padding: 0;
@@ -13,13 +16,14 @@
 		}
 
 		body {
+			font-family: 'Poppins', sans-serif;
 			background: linear-gradient(135deg, #FF6B00 0%, #FF4500 50%, #CC3300 100%);
 			background-size: 400% 400%;
 			animation: gradient 15s ease infinite;
+			min-height: 100vh;
 			position: relative;
 			overflow-x: hidden;
-			min-height: 100vh;
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			color: white;
 		}
 
 		body::before {
@@ -29,9 +33,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: 
-				radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-				radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+			background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
 			pointer-events: none;
 			z-index: 0;
 		}
@@ -43,96 +45,214 @@
 		}
 
 		.container {
+			max-width: 1400px;
+			margin: 0 auto;
+			padding: 0 20px;
 			position: relative;
 			z-index: 1;
-			max-width: 1200px;
-			margin: 0 auto;
-			padding: 2rem;
-			text-align: center;
-			color: white;
 		}
 
-		h1 {
-			font-size: 3rem;
-			margin-bottom: 2rem;
-			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+		main {
+			margin-top: 100px;
+			padding: 3rem 0;
 		}
 
-		.nav {
-			background: rgba(255, 255, 255, 0.1);
+		header {
+			background: rgba(30, 30, 60, 0.98);
 			backdrop-filter: blur(10px);
-			padding: 1rem 0;
-			margin-bottom: 2rem;
-			border-radius: 15px;
+			border-bottom: 2px solid #ffd700;
+			position: fixed;
+			width: 100%;
+			top: 0;
+			z-index: 1000;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 		}
 
-		.nav ul {
-			list-style: none;
+		nav {
 			display: flex;
-			justify-content: center;
-			gap: 2rem;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1.2rem 0;
 		}
 
-		.nav a {
+		.logo {
+			font-size: 1.8rem;
+			font-weight: 800;
 			color: white;
 			text-decoration: none;
-			padding: 0.5rem 1rem;
-			border-radius: 25px;
-			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
 		}
 
-		.nav a:hover {
-			background: rgba(255, 255, 255, 0.2);
+		.logo img {
+			height: 40px;
+			width: 40px;
+		}
+
+		.nav-links {
+			display: flex;
+			list-style: none;
+			gap: 2rem;
+			align-items: center;
+		}
+
+		.nav-links a {
+			color: white;
+			text-decoration: none;
+			padding: 0.7rem 1.5rem;
+			border-radius: 50px;
+			transition: all 0.3s ease;
+			font-weight: 600;
+			position: relative;
+			background: transparent;
+		}
+
+		.nav-links a::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border-radius: 50px;
+			background: linear-gradient(45deg, #FF6B00, #FF4500);
+			opacity: 0;
+			transition: opacity 0.3s ease;
+			z-index: -1;
+		}
+
+		.nav-links a:hover::before {
+			opacity: 1;
+		}
+
+		.nav-links a:hover {
+			transform: translateY(-2px);
+			color: white;
+		}
+
+		.nav-links a.active {
+			background: linear-gradient(45deg, #FF6B00, #FF4500);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+			color: white;
+		}
+
+		.team-header {
+			text-align: center;
+			padding: 3rem 0;
 		}
 
 		.team-logo {
-			width: 300px;
-			height: 300px;
-			margin: 2rem auto;
-			display: block;
-			border-radius: 50%;
-			box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+			width: 200px;
+			height: 200px;
+			margin: 0 auto 1rem;
+			filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+			animation: float 3s ease-in-out infinite;
 		}
 
-		.content {
+		@keyframes float {
+			0%, 100% { transform: translateY(0px); }
+			50% { transform: translateY(-10px); }
+		}
+
+		.team-name {
+			font-size: 3rem;
+			font-weight: 800;
+			margin-bottom: 0.5rem;
+			color: white;
+		}
+
+		.team-full-name {
+			font-size: 1.2rem;
+			color: rgba(255, 255, 255, 0.9);
+			margin-bottom: 2rem;
+		}
+
+		.content-section {
 			background: rgba(255, 255, 255, 0.1);
 			backdrop-filter: blur(10px);
 			border-radius: 20px;
 			padding: 2rem;
 			margin: 2rem 0;
-			border: 1px solid rgba(255, 255, 255, 0.2);
+		}
+
+		.content-section h2 {
+			font-size: 1.8rem;
+			margin-bottom: 1rem;
+			color: #ffd700;
+		}
+
+		.content-section p {
+			font-size: 1.1rem;
+			line-height: 1.8;
+			color: rgba(255, 255, 255, 0.9);
+			margin-bottom: 1rem;
+		}
+
+		@media (max-width: 768px) {
+			.team-name {
+				font-size: 2rem;
+			}
+			.nav-links {
+				flex-wrap: wrap;
+				gap: 0.5rem;
+			}
 		}
 	</style>
 </head>
 <body>
-	<div class="container">
-		<nav class="nav">
-			<img src="ipl_logo.svg" alt="IPL Logo" style="height: 40px; width: 40px; margin-right: 15px;" />
-			<ul>
+	<header>
+		<nav class="container">
+			<a href="index.html" class="logo">
+				<img src="rr_logo_new.svg" alt="RR Logo" />
+				<span>RR</span>
+			</a>
+			<ul class="nav-links">
 				<li><a href="index.html">Home</a></li>
-				<li><a href="rr.html">RR</a></li>
+				<li><a href="rr.html" class="active">About</a></li>
+				<li><a href="fixtures_modern.html">Fixtures</a></li>
+				<li><a href="points_modern.html">Points</a></li>
+				<li><a href="scores_modern.html">Scores</a></li>
+				<li><a href="about.html">About IPL</a></li>
 			</ul>
 		</nav>
+	</header>
 
-		<h1>Rajasthan Royals</h1>
+	<main>
+		<div class="container">
+			<div class="team-header">
+				<img src="rr_logo_new.svg" alt="RR" class="team-logo">
+				<h1 class="team-name">Rajasthan Royals</h1>
+				<p class="team-full-name">RR</p>
+			</div>
 
-		<img src="rr_logo_new.svg" alt="RR" class="team-logo">
+			<div class="content-section">
+				<h2><i class="fas fa-trophy"></i> About RR</h2>
+				<p>Rajasthan Royals is a franchise cricket team based in Jaipur, Rajasthan, that plays in the Indian Premier League. The team was the inaugural champions of the IPL in 2008 and continues to be a competitive force in the tournament.</p>
+			</div>
 
-		<div class="content">
-			<h2>About RR</h2>
-			<p>Rajasthan Royals is a franchise cricket team based in Jaipur, Rajasthan, that plays in the Indian Premier League. The team was the inaugural champions of the IPL in 2008 and continues to be a competitive force in the tournament.</p>
+			<div class="content-section">
+				<h2><i class="fas fa-users"></i> Complete Squad</h2>
+				<p style="text-align: center; color: #ffd700; padding: 3rem; font-size: 1.2rem;">
+					Team roster will be updated once confirmed. Check back soon!
+				</p>
+			</div>
+
+			<div class="content-section">
+				<h2><i class="fas fa-link"></i> Official Links</h2>
+				<p>
+					For more information, visit <a href="https://www.rajasthanroyals.com/" target="_blank" style="color: #ffd700;">rajasthanroyals.com</a>
+				</p>
+			</div>
 		</div>
+	</main>
 
-		<div class="content">
-			<h2>Complete Squad</h2>
-			<p style="text-align: center; color: #ffd700; padding: 2rem; font-size: 1.2rem;">
-				Team roster will be updated once confirmed. Check back soon!
+	<footer style="background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); text-align: center; padding: 2rem 0; margin-top: 4rem; border-top: 2px solid rgba(255, 255, 255, 0.2);">
+		<div class="container">
+			<p>&copy; 2026 SportsUP99. All rights reserved.</p>
+			<p style="margin-top: 0.5rem;">
+				<a href="admin-upload.html" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; font-size: 0.9rem;">
+					<i class="fas fa-cog"></i> Admin Upload
+				</a>
 			</p>
 		</div>
-
-		<div class="content">
-			<h3>For more information, visit <a href="https://www.rajasthanroyals.com/" style="color: #ffd700;">rajasthanroyals.com</a></h3>
-		</div>
-	</div>
+	</footer>
 </body>
 </html>

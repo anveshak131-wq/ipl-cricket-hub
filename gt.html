@@ -43,30 +43,36 @@
 			100% { background-position: 0% 50%; }
 		}
 
-		.container {
-			max-width: 1200px;
-			margin: 0 auto;
-			padding: 2rem;
-			position: relative;
-			z-index: 1;
-		}
+	.container {
+		max-width: 1400px;
+		margin: 0 auto;
+		padding: 0 20px;
+		position: relative;
+		z-index: 1;
+	}
 
-		header {
-			background: rgba(0, 0, 0, 0.3);
-			backdrop-filter: blur(10px);
-			padding: 1.5rem 0;
-			position: sticky;
-			top: 0;
-			z-index: 100;
-			border-bottom: 2px solid #00D8FF;
-		}
+	header {
+		background: rgba(30, 30, 60, 0.98);
+		backdrop-filter: blur(10px);
+		border-bottom: 2px solid #00D8FF;
+		position: fixed;
+		width: 100%;
+		top: 0;
+		z-index: 1000;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	}
 
-		nav {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 0 2rem;
-		}
+	nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1.2rem 0;
+	}
+
+	main {
+		margin-top: 100px;
+		padding: 3rem 0;
+	}
 
 		.logo {
 			font-size: 1.5rem;
@@ -84,18 +90,42 @@
 			gap: 1.5rem;
 		}
 
-		.nav-links a {
-			color: white;
-			text-decoration: none;
-			padding: 0.5rem 1rem;
-			border-radius: 50px;
-			transition: all 0.3s;
-		}
+	.nav-links a {
+		color: white;
+		text-decoration: none;
+		padding: 0.7rem 1.5rem;
+		border-radius: 50px;
+		transition: all 0.3s ease;
+		font-weight: 600;
+		position: relative;
+		background: transparent;
+	}
 
-		.nav-links a:hover, .nav-links a.active {
-			background: rgba(0, 216, 255, 0.3);
-			transform: translateY(-2px);
-		}
+	.nav-links a::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 50px;
+		background: linear-gradient(45deg, #007FB8, #1B4F72);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		z-index: -1;
+	}
+
+	.nav-links a:hover::before {
+		opacity: 1;
+	}
+
+	.nav-links a:hover {
+		transform: translateY(-2px);
+		color: white;
+	}
+
+	.nav-links a.active {
+		background: linear-gradient(45deg, #007FB8, #1B4F72);
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+		color: white;
+	}
 
 		.team-header {
 			text-align: center;
@@ -255,19 +285,24 @@
 </head>
 <body>
 	<header>
-		<nav>
-			<a href="teams.html" class="logo">
-				<img src="ipl_logo_new.svg" alt="IPL Logo" style="height: 30px; width: 30px; margin-right: 10px;" />
-				<span>Back to Teams</span>
+		<nav class="container">
+			<a href="index.html" class="logo">
+				<img src="gt_logo_new.svg" alt="GT Logo" />
+				<span>GT</span>
 			</a>
 			<ul class="nav-links">
-				<li><a href="gt.html" class="active">About</a></li>
 				<li><a href="index.html">Home</a></li>
+				<li><a href="gt.html" class="active">About</a></li>
+				<li><a href="fixtures_modern.html">Fixtures</a></li>
+				<li><a href="points_modern.html">Points</a></li>
+				<li><a href="scores_modern.html">Scores</a></li>
+				<li><a href="about.html">About IPL</a></li>
 			</ul>
 		</nav>
 	</header>
 
-	<div class="container">
+	<main>
+		<div class="container">
 		<div class="team-header">
 			<div class="team-logo">GT</div>
 			<h1 class="team-name">Gujarat Titans</h1>
@@ -315,6 +350,7 @@
 				Owner: CVC Capital Partners
 			</p>
 		</div>
-	</div>
+		</div>
+	</main>
 </body>
 </html>
