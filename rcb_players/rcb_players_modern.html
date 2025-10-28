@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCB Players - IPL 2026</title>
+    <link rel="shortcut icon" href="../index.ico" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rcb-primary: #D2001A;
+            --rcb-secondary: #6B0000;
+            --foreign-badge: #FF6B35;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #D2001A 0%, #6B0000 50%, #420000 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: white;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(30, 30, 60, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ffd700;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+            width: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            background: linear-gradient(45deg, var(--rcb-primary), var(--rcb-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(45deg, var(--rcb-primary), var(--rcb-secondary));
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        main {
+            margin-top: 100px;
+            padding: 3rem 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .player-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: #ffd700;
+        }
+
+        .player-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        }
+
+        .player-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .foreign-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: var(--foreign-badge);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .player-role {
+            color: #ffd700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .players-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../rcb.html" class="logo">
+                <img src="../rcb_logo_new.svg" alt="RCB Logo" />
+                <span>RCB</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../rcb.html">About</a></li>
+                <li><a href="rcb_players_modern.html" class="active">Players</a></li>
+                <li><a href="../fixtures_modern.html">Fixtures</a></li>
+                <li><a href="../index.html">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-users"></i> RCB Squad 2026</h1>
+                <p>Complete roster of Royal Challengers Bangalore players</p>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading players...</p>
+            </div>
+
+            <div id="playersGrid" class="players-grid" style="display: none;">
+                <!-- Players will be loaded here dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SportsUP99. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="../admin-upload.html" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; font-size: 0.9rem;">
+                    <i class="fas fa-cog"></i> Admin Upload
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Players data - can be loaded from uploaded files
+        let players = [
+            {
+                name: "Virat Kohli",
+                role: "Batsman",
+                image: "virat_kohli.png",
+                nationality: "Indian",
+                battingStyle: "Right-handed",
+                bowlingStyle: "Right-arm medium",
+                captain: true
+            },
+            {
+                name: "AB de Villiers",
+                role: "Wicket Keeper",
+                image: "abde.png",
+                nationality: "South African",
+                battingStyle: "Right-handed",
+                bowlingStyle: "Right-arm medium",
+                captain: false
+            },
+            {
+                name: "Aaron Finch",
+                role: "Batsman",
+                image: "Finch.png",
+                nationality: "Australian",
+                battingStyle: "Right-handed",
+                bowlingStyle: "-",
+                captain: false
+            },
+            {
+                name: "Yuzvendra Chahal",
+                role: "Bowler",
+                image: "yuzi.png",
+                nationality: "Indian",
+                battingStyle: "Right-handed",
+                bowlingStyle: "Right-arm leg break",
+                captain: false
+            },
+            {
+                name: "Mohammed Siraj",
+                role: "Bowler",
+                image: "siraj.png",
+                nationality: "Indian",
+                battingStyle: "Right-handed",
+                bowlingStyle: "Right-arm fast",
+                captain: false
+            },
+            {
+                name: "Devdutt Padikkal",
+                role: "Batsman",
+                image: "dev.png",
+                nationality: "Indian",
+                battingStyle: "Left-handed",
+                bowlingStyle: "-",
+                captain: false
+            },
+            {
+                name: "Moeen Ali",
+                role: "All-rounder",
+                image: "Moeen.png",
+                nationality: "English",
+                battingStyle: "Left-handed",
+                bowlingStyle: "Right-arm off break",
+                captain: false
+            },
+            {
+                name: "Chris Morris",
+                role: "All-rounder",
+                image: "morris.png",
+                nationality: "South African",
+                battingStyle: "Right-handed",
+                bowlingStyle: "Right-arm fast medium",
+                captain: false
+            }
+        ];
+
+        const loading = document.getElementById('loading');
+        const playersGrid = document.getElementById('playersGrid');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPlayers();
+        });
+
+        function loadPlayers() {
+            loading.style.display = 'block';
+            playersGrid.style.display = 'none';
+
+            setTimeout(() => {
+                displayPlayers();
+                loading.style.display = 'none';
+                playersGrid.style.display = 'grid';
+            }, 1000);
+        }
+
+        function displayPlayers() {
+            playersGrid.innerHTML = '';
+            players.forEach(player => {
+                const card = createPlayerCard(player);
+                playersGrid.appendChild(card);
+            });
+        }
+
+        function createPlayerCard(player) {
+            const card = document.createElement('div');
+            card.className = 'player-card';
+
+            // Check if player is foreign (not Indian)
+            const isForeign = player.nationality && 
+                player.nationality.toLowerCase() !== 'indian' && 
+                player.nationality.toLowerCase() !== 'india' &&
+                player.isForeign !== false;
+            
+            const foreignBadge = isForeign ? 
+                `<span class="foreign-badge"><i class="fas fa-globe"></i> Overseas Player</span>` : '';
+
+            card.innerHTML = `
+                <img src="${player.image}" alt="${player.name}" class="player-image" onerror="this.src='a.png'">
+                <h3 class="player-name">
+                    ${player.name} ${player.captain ? '(C)' : ''}
+                    ${foreignBadge}
+                </h3>
+                <div class="player-role">${player.role}</div>
+                <div class="player-details">
+                    <div><strong>Nationality:</strong> ${player.nationality}</div>
+                    <div><strong>Batting:</strong> ${player.battingStyle}</div>
+                    <div><strong>Bowling:</strong> ${player.bowlingStyle}</div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Load players from localStorage if uploaded
+        function loadUploadedPlayers() {
+            try {
+                const uploadedPlayers = localStorage.getItem('uploaded_rcb_players');
+                if (uploadedPlayers) {
+                    const parsedPlayers = JSON.parse(uploadedPlayers);
+                    if (Array.isArray(parsedPlayers) && parsedPlayers.length > 0) {
+                        players = parsedPlayers;
+                        console.log(`Loaded ${players.length} uploaded players for RCB`);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading uploaded players:', error);
+            }
+        }
+
+        // Initial load
+        loadUploadedPlayers();
+        loadPlayers();
+    </script>
+</body>
+</html>
+
