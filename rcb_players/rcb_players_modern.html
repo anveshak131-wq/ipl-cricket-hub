@@ -415,17 +415,24 @@
             const foreignBadge = isForeign ? 
                 `<span class="foreign-badge"><i class="fas fa-globe"></i> Overseas Player</span>` : '';
 
+            // Get fields from CSV (case-insensitive)
+            const role = player.role || 'Player';
+            const nat = player.nationality || 'Unknown';
+            const batting = (player['batting style'] || player.battingStyle || '-').trim();
+            const bowling = (player['bowling style'] || player.bowlingStyle || '-').trim();
+            const imageFile = player.image || 'a.png';
+
             card.innerHTML = `
-                <img src="${player.image}" alt="${player.name}" class="player-image" onerror="this.src='a.png'">
+                <img src="${imageFile}" alt="${player.name}" class="player-image" onerror="this.src='a.png'">
                 <h3 class="player-name">
                     ${player.name} ${player.captain ? '(C)' : ''}
                     ${foreignBadge}
                 </h3>
-                <div class="player-role">${player.role}</div>
+                <div class="player-role">${role}</div>
                 <div class="player-details">
-                    <div><strong>Nationality:</strong> ${player.nationality}</div>
-                    <div><strong>Batting:</strong> ${player.battingStyle}</div>
-                    <div><strong>Bowling:</strong> ${player.bowlingStyle}</div>
+                    <div><strong>Nationality:</strong> ${nat}</div>
+                    <div><strong>Batting:</strong> ${batting}</div>
+                    <div><strong>Bowling:</strong> ${bowling}</div>
                 </div>
             `;
 
