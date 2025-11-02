@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-styles.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo">
+                <span>IPL Cricket Hub Admin</span>
+            </a>
+            <div class="nav-actions">
+                <button onclick="window.location.href='admin-live-match.html'" class="btn-back" style="margin-right: 10px; background: linear-gradient(135deg, #FF4655, #FF6B7A);">
+                    <i class="fas fa-broadcast-tower"></i> Live Match Control
+                </button>
+                <button onclick="window.location.href='admin-users.html'" class="btn-back" style="margin-right: 10px; background: linear-gradient(135deg, #10B981, #34D399);">
+                    <i class="fas fa-users"></i> User Management
+                </button>
+                <button onclick="window.location.href='index.html'" class="btn-back">
+                    ← Back to Website
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-badge">
+                    <span>🔒 Admin Dashboard</span>
+                </div>
+                <h1>IPL CRICKET HUB MANAGEMENT</h1>
+                <p>Complete control center for players, fixtures, and points table</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Overview -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalPlayers">0</div>
+                        <div class="stat-label">Total Players</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalFixtures">0</div>
+                        <div class="stat-label">Fixtures</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalTeams">10</div>
+                        <div class="stat-label">Teams</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab Navigation -->
+    <section class="tabs-section">
+        <div class="container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('players')">👥 Players</button>
+                <button class="tab-btn" onclick="switchTab('fixtures')">📅 Fixtures</button>
+                <button class="tab-btn" onclick="switchTab('points')">🏆 Points Table</button>
+                <button class="tab-btn" onclick="switchTab('commentary')">🎙️ Live Commentary</button>
+                <button class="tab-btn" onclick="switchTab('users')">👤 User Management</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Players Tab -->
+    <div id="players-tab" class="tab-content active">
+        <!-- Add Players Section -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>👥 Add Players - Manual Entry</h2>
+                        <p>Add players directly. All changes are saved to your browser and reflected on the website.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Team</label>
+                        <select id="teamSelectManual" class="form-control">
+                            <option value="">Select team</option>
+                            <option value="RCB">Royal Challengers Bangalore (RCB)</option>
+                            <option value="MI">Mumbai Indians (MI)</option>
+                            <option value="CSK">Chennai Super Kings (CSK)</option>
+                            <option value="SRH">Sunrisers Hyderabad (SRH)</option>
+                            <option value="PBSK">Punjab Kings (PBSK)</option>
+                            <option value="KKR">Kolkata Knight Riders (KKR)</option>
+                            <option value="DC">Delhi Capitals (DC)</option>
+                            <option value="RR">Rajasthan Royals (RR)</option>
+                            <option value="GT">Gujarat Titans (GT)</option>
+                            <option value="LSG">Lucknow Super Giants (LSG)</option>
+                        </select>
+                    </div>
+
+                    <div id="playersList" class="players-list"></div>
+
+                    <div class="button-group">
+                        <button class="btn btn-add" onclick="addPlayerRow()">+ Add Player</button>
+                        <button class="btn btn-save" onclick="savePlayers()">💾 Save Players</button>
+                    </div>
+
+                    <div class="message success-message" id="playersManualSuccess"></div>
+                    <div class="message error-message" id="playersManualError"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Players Preview -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>Players for Selected Team</h2>
+                    </div>
+                    <div id="uploadedPlayersContainer" class="players-preview">
+                        <p class="placeholder-text">Select a team to view players.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Fixtures Tab -->
+    <div id="fixtures-tab" class="tab-content">
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>📅 Add Fixtures - Manual Entry</h2>
+                        <p>Add match fixtures directly. All changes are saved to localStorage.</p>
+                    </div>
+
+                    <div id="fixturesList" class="fixtures-list"></div>
+
+                    <div class="button-group">
+                        <button class="btn btn-add" onclick="addFixtureRow()">+ Add Fixture</button>
+                        <button class="btn btn-save" onclick="saveFixtures()">💾 Save Fixtures</button>
+                    </div>
+
+                    <div class="message success-message" id="fixturesSuccess"></div>
+                    <div class="message error-message" id="fixturesError"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fixtures Preview -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>Uploaded Fixtures</h2>
+                    </div>
+                    <div id="fixturesPreview" class="fixtures-preview">
+                        <p class="placeholder-text">No fixtures added yet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Points Table Tab -->
+    <div id="points-tab" class="tab-content">
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>🏆 Add Points Table - Manual Entry</h2>
+                        <p>Add points table data directly. All changes are saved to localStorage.</p>
+                    </div>
+
+                    <div id="pointsList" class="points-list"></div>
+
+                    <div class="button-group">
+                        <button class="btn btn-add" onclick="addPointsRow()">+ Add Team</button>
+                        <button class="btn btn-save" onclick="savePoints()">💾 Save Points Table</button>
+                    </div>
+
+                    <div class="message success-message" id="pointsSuccess"></div>
+                    <div class="message error-message" id="pointsError"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Points Preview -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>Current Points Table</h2>
+                    </div>
+                    <div id="pointsPreview" class="points-preview">
+                        <p class="placeholder-text">No points table added yet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Live Commentary Tab -->
+    <div id="commentary-tab" class="tab-content">
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>🎙️ Post Live Match Commentary</h2>
+                        <p>Add commentary every 5 overs or during breaks. AI will automatically enhance your text for better readability.</p>
+                    </div>
+
+                    <div class="commentary-form">
+                        <div class="form-group">
+                            <label>Over Number</label>
+                            <input type="number" id="commentaryOver" class="form-control" placeholder="e.g., 5.3" step="0.1" min="0" max="20">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Commentary Text</label>
+                            <textarea id="commentaryText" class="form-control" rows="5" placeholder="Example: Rohit Sharma hits a massive six over long-on. That's his third six of the innings!"></textarea>
+                            <small class="form-hint">
+                                💡 Tip: Include player names, shot descriptions, and match situation. AI will add excitement and context!
+                            </small>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn btn-save" onclick="postCommentary()">
+                                <i class="fas fa-paper-plane"></i> Post Commentary
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearCommentaryForm()">
+                                Clear Form
+                            </button>
+                        </div>
+
+                        <div class="message success-message" id="commentarySuccess"></div>
+                        <div class="message error-message" id="commentaryError"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commentary Preview -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>Posted Commentary</h2>
+                        <button class="btn btn-secondary" onclick="clearAllCommentary()" style="float: right;">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                    <div id="commentaryPreview" class="commentary-preview">
+                        <p class="placeholder-text">No commentary posted yet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- User Management Tab -->
+    <div id="users-tab" class="tab-content">
+        <!-- Collected User Emails -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>📧 Collected User Emails</h2>
+                        <p>All users who signed in to post comments on Live Match Updates</p>
+                    </div>
+
+                    <div class="user-stats-row">
+                        <div class="stat-box">
+                            <div class="stat-number" id="totalUsers">0</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="blockedUsers">0</div>
+                            <div class="stat-label">Blocked Users</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="totalComments">0</div>
+                            <div class="stat-label">Total Comments</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="exportEmails()">
+                            <i class="fas fa-download"></i> Export Emails
+                        </button>
+                        <button class="btn btn-secondary" onclick="refreshUserData()">
+                            <i class="fas fa-sync-alt"></i> Refresh Data
+                        </button>
+                    </div>
+
+                    <div class="users-table-container" id="usersTableContainer">
+                        <p class="placeholder-text">No users have signed in yet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Comments Management -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>💬 User Comments Management</h2>
+                        <p>Monitor and moderate user comments from Live Match Updates</p>
+                    </div>
+
+                    <div class="filter-row">
+                        <select id="commentFilter" onchange="loadUserCommentsAdmin()">
+                            <option value="all">All Comments</option>
+                            <option value="recent">Recent Comments</option>
+                            <option value="flagged">Flagged Comments</option>
+                        </select>
+                        <button class="btn btn-danger" onclick="clearAllUserComments()">
+                            <i class="fas fa-trash-alt"></i> Clear All Comments
+                        </button>
+                    </div>
+
+                    <div id="userCommentsAdmin" class="user-comments-admin">
+                        <p class="placeholder-text">No user comments yet.</p>
+                    </div>
+
+                    <div class="message success-message" id="userMgmtSuccess"></div>
+                    <div class="message error-message" id="userMgmtError"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Commentary Management -->
+        <section class="admin-section">
+            <div class="container">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>🎙️ Admin Commentary Management</h2>
+                        <p>Manage and delete admin-posted commentary (Admin access only)</p>
+                    </div>
+
+                    <div class="admin-auth-box" id="adminAuthBox">
+                        <h3><i class="fas fa-lock"></i> Admin Verification Required</h3>
+                        <p>Enter admin password to manage commentary</p>
+                        <div class="auth-form">
+                            <input type="password" id="adminPassword" class="form-control" placeholder="Enter admin password">
+                            <button class="btn btn-primary" onclick="verifyAdmin()">
+                                <i class="fas fa-key"></i> Verify
+                            </button>
+                        </div>
+                        <small class="form-hint">Default password: admin123 (Change this in production!)</small>
+                    </div>
+
+                    <div class="admin-commentary-mgmt" id="adminCommentaryMgmt" style="display: none;">
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle"></i> Admin Verified
+                            <button class="btn-logout-admin" onclick="logoutAdmin()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+
+                        <div id="adminCommentaryList" class="admin-commentary-list">
+                            <p class="placeholder-text">No admin commentary posted yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 SportsUP99. All rights reserved. | Admin Dashboard</p>
+        </div>
+    </footer>
+
+    <script src="js/admin-scripts-full.js"></script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Match Updates - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/live-match-updates.css">
+</head>
+<body>
+    <!-- Live Indicator -->
+    <div class="live-indicator">
+        <span class="live-dot"></span>
+        <span class="live-text">LIVE</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Cricket Hub">
+                <span>IPL Cricket Hub</span>
+            </a>
+            <div class="nav-actions">
+                <a href="index.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Match Header -->
+    <section class="match-header">
+        <div class="match-title">
+            <h1>LIVE MATCH CENTER</h1>
+            <p>Real-time updates with AI-powered analysis</p>
+        </div>
+
+        <!-- Match Scoreboard -->
+        <div class="scoreboard" id="scoreboard">
+            <div class="team-score team-a">
+                <img src="assets/mi_logo_new.svg" alt="Team A" class="team-logo-score">
+                <div class="score-details">
+                    <h3>Mumbai Indians</h3>
+                    <div class="score">
+                        <span class="runs">185</span>
+                        <span class="wickets">/4</span>
+                        <span class="overs">(18.3 Overs)</span>
+                    </div>
+                    <div class="run-rate">
+                        <span>CRR: 10.03</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="match-status">
+                <div class="status-badge live">
+                    <i class="fas fa-circle"></i>
+                    LIVE
+                </div>
+                <div class="match-info">
+                    <span class="venue">Wankhede Stadium, Mumbai</span>
+                    <span class="date">March 24, 2026</span>
+                </div>
+            </div>
+
+            <div class="team-score team-b">
+                <div class="score-details right">
+                    <h3>Chennai Super Kings</h3>
+                    <div class="score">
+                        <span class="overs">(20 Overs)</span>
+                        <span class="wickets">7/</span>
+                        <span class="runs">178</span>
+                    </div>
+                    <div class="run-rate">
+                        <span>RRR: 8.67</span>
+                    </div>
+                </div>
+                <img src="assets/csk_logo_new.svg" alt="Team B" class="team-logo-score">
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-layout">
+        <!-- Left Sidebar - Match Stats -->
+        <aside class="stats-sidebar" id="statsSidebar">
+            <div class="sidebar-section">
+                <div class="no-live-content">
+                    <i class="fas fa-calendar-times"></i>
+                    <h4>No Live Match</h4>
+                    <p>Match statistics will appear here when a match is in progress</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center - Commentary Feed -->
+        <main class="commentary-feed">
+            <div class="feed-header">
+                <h2>
+                    <i class="fas fa-microphone-alt"></i>
+                    AI-Enhanced Live Commentary
+                </h2>
+                <button class="refresh-btn" onclick="loadCommentary()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+
+            <div class="commentary-container" id="commentaryContainer">
+                <!-- Commentary items will be loaded here -->
+                <div class="no-commentary">
+                    <i class="fas fa-comment-slash"></i>
+                    <p>Waiting for live commentary...</p>
+                    <small>Admins can post updates every 5 overs or during breaks</small>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar - Key Moments -->
+        <aside class="moments-sidebar" id="momentsSidebar">
+            <div class="sidebar-section">
+                <div class="no-live-content">
+                    <i class="fas fa-star-half-alt"></i>
+                    <h4>Key Moments</h4>
+                    <p>Wickets, boundaries, and milestones will appear here during live matches</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="no-live-content">
+                    <i class="fas fa-brain"></i>
+                    <h4>AI Insights</h4>
+                    <p>Real-time AI predictions and match analysis will be available when a match is in progress</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Admin Commentary Modal (Hidden by default) -->
+    <div class="commentary-notification" id="newCommentaryNotification">
+        <i class="fas fa-bell"></i>
+        <span>New commentary available!</span>
+        <button onclick="dismissNotification()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- User Comments Section -->
+    <section class="user-comments-section">
+        <div class="comments-container">
+            <div class="comments-header">
+                <h2><i class="fas fa-comments"></i> Match Discussion</h2>
+                <p>Share your thoughts about the match with other fans</p>
+            </div>
+
+            <!-- User Sign In / Profile -->
+            <div class="user-profile-box" id="userProfileBox">
+                <div class="sign-in-prompt" id="signInPrompt">
+                    <div class="sign-in-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3>Join the Discussion</h3>
+                    <p>Sign in to post your comments and reactions</p>
+                    <button class="btn-sign-in" onclick="showSignInForm()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                </div>
+
+                <div class="sign-in-form" id="signInForm" style="display: none;">
+                    <h3>Sign In to Comment</h3>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Your Name</label>
+                        <input type="text" id="userName" class="form-input" placeholder="Enter your name" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="userEmail" class="form-input" placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-submit" onclick="signInUser()">
+                            <i class="fas fa-check"></i>
+                            Sign In
+                        </button>
+                        <button class="btn-cancel" onclick="hideSignInForm()">
+                            Cancel
+                        </button>
+                    </div>
+                    <small class="form-note">
+                        <i class="fas fa-lock"></i> Your email will only be used for identification and won't be shared publicly
+                    </small>
+                </div>
+
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name-display" id="userNameDisplay"></span>
+                        <span class="user-email-display" id="userEmailDisplay"></span>
+                    </div>
+                    <button class="btn-sign-out" onclick="signOutUser()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+
+            <!-- Post Comment Form -->
+            <div class="post-comment-box" id="postCommentBox" style="display: none;">
+                <h3><i class="fas fa-pen"></i> Post Your Comment</h3>
+                <textarea id="userCommentText" class="comment-textarea" rows="4" placeholder="Share your thoughts about this match... (Match-related comments only)" maxlength="500"></textarea>
+                <div class="comment-actions">
+                    <div class="char-count">
+                        <span id="charCount">0</span>/500 characters
+                    </div>
+                    <button class="btn-post-comment" onclick="postUserComment()">
+                        <i class="fas fa-paper-plane"></i>
+                        Post Comment
+                    </button>
+                </div>
+                <div class="comment-message" id="commentMessage"></div>
+            </div>
+
+            <!-- Comments List -->
+            <div class="comments-list">
+                <div class="comments-list-header">
+                    <h3><i class="fas fa-comment-dots"></i> Fan Comments (<span id="commentsCount">0</span>)</h3>
+                    <div class="comments-filter">
+                        <select id="commentsSort" onchange="loadUserComments()">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="comments-container-list" id="userCommentsContainer">
+                    <div class="no-comments">
+                        <i class="fas fa-comment-slash"></i>
+                        <p>No comments yet. Be the first to share your thoughts!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Live Match Updates</h3>
+                <p>Real-time scores and AI-enhanced commentary for IPL</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="fixtures_modern.html">Fixtures</a></li>
+                    <li><a href="points_modern.html">Points Table</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Match Info</h4>
+                <ul>
+                    <li><a href="#scoreboard">Live Scoreboard</a></li>
+                    <li><a href="#commentaryContainer">Commentary</a></li>
+                    <li><a href="fixtures_modern.html">Fixtures</a></li>
+                    <li><a href="points_modern.html">Points Table</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 IPL Live Match Center. AI-Powered Commentary Engine</p>
+        </div>
+    </footer>
+
+    <script src="js/live-match-updates.js"></script>
+</body>
+</html>

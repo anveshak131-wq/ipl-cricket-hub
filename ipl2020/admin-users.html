@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - IPL Cricket Hub Admin</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-users.css">
+</head>
+<body>
+    <!-- Admin Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <div class="login-header">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo" class="login-logo">
+                <h2>Admin Access Required</h2>
+                <p>Enter your admin credentials to view user data</p>
+            </div>
+            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Admin Username</label>
+                    <input type="text" id="adminUsername" class="form-input" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Admin Password</label>
+                    <input type="password" id="adminPassword" class="form-input" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+                <div class="login-hint">
+                    <i class="fas fa-info-circle"></i>
+                    Default credentials: admin / admin123
+                </div>
+            </form>
+            <div class="login-error" id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard" id="dashboard" style="display: none;">
+        <!-- Navbar -->
+        <nav class="admin-navbar">
+            <div class="nav-content">
+                <div class="nav-left">
+                    <img src="assets/ipl_logo_new.svg" alt="IPL Logo" class="nav-logo">
+                    <div class="nav-title">
+                        <h1>User Management</h1>
+                        <span>IPL Cricket Hub Admin Panel</span>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <span class="admin-username" id="adminDisplayName">Admin</span>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="totalUsersCount">0</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="activeUsersCount">0</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #EF4444, #F87171);">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="blockedUsersCount">0</div>
+                        <div class="stat-label">Blocked Users</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value" id="totalCommentsCount">0</div>
+                        <div class="stat-label">Total Comments</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterUsers()">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action btn-primary" onclick="exportToCSV()">
+                        <i class="fas fa-download"></i>
+                        Export CSV
+                    </button>
+                    <button class="btn-action btn-secondary" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                    <select class="filter-select" id="statusFilter" onchange="filterUsers()">
+                        <option value="all">All Users</option>
+                        <option value="active">Active Only</option>
+                        <option value="blocked">Blocked Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2><i class="fas fa-users"></i> Registered Users</h2>
+                    <span class="table-count">Showing <span id="displayCount">0</span> users</span>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="users-table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><i class="fas fa-user"></i> Name</th>
+                                <th><i class="fas fa-envelope"></i> Email Address</th>
+                                <th><i class="fas fa-comment"></i> Comments</th>
+                                <th><i class="fas fa-calendar"></i> Joined Date</th>
+                                <th><i class="fas fa-clock"></i> Last Active</th>
+                                <th><i class="fas fa-toggle-on"></i> Status</th>
+                                <th><i class="fas fa-cog"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr class="loading-row">
+                                <td colspan="8">
+                                    <div class="loading-spinner">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Loading users...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- No Users Message -->
+                <div class="no-data" id="noDataMessage" style="display: none;">
+                    <i class="fas fa-users-slash"></i>
+                    <p>No users found</p>
+                    <small>Users who sign in to post comments will appear here</small>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="quick-links">
+                <a href="admin-upload.html" class="quick-link">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Data</span>
+                </a>
+                <a href="live-match-updates.html" class="quick-link">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>Live Match Center</span>
+                </a>
+                <a href="index.html" class="quick-link">
+                    <i class="fas fa-home"></i>
+                    <span>Website Home</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <script src="js/admin-users.js"></script>
+</body>
+</html>
