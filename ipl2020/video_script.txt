@@ -23,11 +23,9 @@ The Live Scores page provides real-time match updates with detailed scorecards, 
 [Team Pages - 15 seconds]
 Each team has its own dedicated page with detailed information, squad list, and player profiles. Click on players to see their stats, roles (Captain, Vice-Captain, Wicket-Keeper), and additional details.
 
-[About and Support - 10 seconds]
-The About page provides information about the website and IPL. Support pages include Help, Contact, Privacy Policy, and Terms of Service.
 
 [Conclusion - 10 seconds]
 IPL Cricket Hub is built with modern web technologies for fast loading and great user experience. Whether you're a die-hard fan or casual viewer, our site has everything you need to stay updated with IPL action!
 
-Visit: https://anveshak131-wq.github.io/ipl2026/
+Visit: https://anveshak131-wq.github.io/ipl2020/
 Made with ❤️ for cricket fans worldwide.
