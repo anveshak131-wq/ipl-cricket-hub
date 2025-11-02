@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points Table - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shared-modern.css">
+    <link rel="stylesheet" href="css/points-styles.css">
+</head>
+<body>
+    <!-- Animated Mesh Background -->
+    <div class="mesh-background">
+        <div class="mesh-gradient mesh-gradient-1"></div>
+        <div class="mesh-gradient mesh-gradient-2"></div>
+        <div class="mesh-gradient mesh-gradient-3"></div>
+        <div class="mesh-gradient mesh-gradient-4"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo">
+                <span>IPL Cricket Hub</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#teams">Teams</a></li>
+                <li><a href="fixtures_modern.html">Fixtures</a></li>
+                <li><a href="points_modern.html" class="active">Points</a></li>
+                <li><a href="scores_modern.html">Scores</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <div class="header-badge">
+                <span>🏆 Season 19 Standings</span>
+            </div>
+            <h1>POINTS TABLE</h1>
+            <p>Track team standings, performance metrics, and qualification scenarios. Updated after every match throughout the season.</p>
+        </div>
+    </section>
+
+    <!-- Stats Cards -->
+    <section class="stats-overview">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card reveal">
+                    <div class="stat-icon">👑</div>
+                    <div class="stat-number" id="topTeam">TBD</div>
+                    <div class="stat-label">League Leader</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-number" id="matchesPlayed">0</div>
+                    <div class="stat-label">Matches Played</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-number" id="topNRR">-</div>
+                    <div class="stat-label">Highest NRR</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-number" id="qualified">0</div>
+                    <div class="stat-label">Qualified</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Points Table -->
+    <section class="points-table-section">
+        <div class="container">
+            <div class="table-header">
+                <h2>Current Standings</h2>
+                <div class="table-controls">
+                    <button class="control-btn" onclick="sortTable('points')">
+                        ↓
+                        Sort by Points
+                    </button>
+                    <button class="control-btn" onclick="sortTable('nrr')">
+                        📈
+                        Sort by NRR
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container reveal">
+                <table class="points-table" id="pointsTable">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">Rank</th>
+                            <th class="team-col">Team</th>
+                            <th class="stat-col">M</th>
+                            <th class="stat-col">W</th>
+                            <th class="stat-col">L</th>
+                            <th class="stat-col">NR</th>
+                            <th class="stat-col">Pts</th>
+                            <th class="stat-col">NRR</th>
+                            <th class="form-col">Form</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Table rows will be generated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Legend -->
+            <div class="table-legend reveal">
+                <div class="legend-item">
+                    <span class="legend-color qualified"></span>
+                    <span>Qualified for Playoffs</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color eliminated"></span>
+                    <span>Eliminated</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-abbr">M</span> - Matches
+                </div>
+                <div class="legend-item">
+                    <span class="legend-abbr">W</span> - Won
+                </div>
+                <div class="legend-item">
+                    <span class="legend-abbr">L</span> - Lost
+                </div>
+                <div class="legend-item">
+                    <span class="legend-abbr">NR</span> - No Result
+                </div>
+                <div class="legend-item">
+                    <span class="legend-abbr">Pts</span> - Points
+                </div>
+                <div class="legend-item">
+                    <span class="legend-abbr">NRR</span> - Net Run Rate
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Qualification Scenarios -->
+    <section class="scenarios-section">
+        <div class="container">
+            <h2 class="section-title reveal">Qualification Scenarios</h2>
+            <div class="scenarios-grid">
+                <div class="scenario-card reveal">
+                    <div class="scenario-icon">🎯</div>
+                    <h3>Top 4 Qualify</h3>
+                    <p>Teams finishing in the top 4 positions will advance to the playoffs.</p>
+                </div>
+                <div class="scenario-card reveal">
+                    <div class="scenario-icon">📊</div>
+                    <h3>Points System</h3>
+                    <p>Win = 2 points, Loss = 0 points, No Result = 1 point per team.</p>
+                </div>
+                <div class="scenario-card reveal">
+                    <div class="scenario-icon">⚖️</div>
+                    <h3>Tiebreaker</h3>
+                    <p>If teams are tied on points, Net Run Rate (NRR) determines the rank.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="container">
+            <div class="actions-grid reveal">
+                <a href="fixtures_modern.html" class="action-card">
+                    <div class="action-icon">📅</div>
+                    <h3>Match Fixtures</h3>
+                    <p>View complete schedule</p>
+                    →
+                </a>
+                <a href="scores_modern.html" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <h3>Live Scores</h3>
+                    <p>Real-time match updates</p>
+                    →
+                </a>
+                <a href="index.html#teams" class="action-card">
+                    <div class="action-icon">👥</div>
+                    <h3>Teams</h3>
+                    <p>Explore all squads</p>
+                    →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>IPL Cricket Hub</h3>
+                    <p>Your ultimate destination for IPL standings, statistics, and updates.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="fixtures_modern.html">Fixtures</a>
+                    <a href="scores_modern.html">Scores</a>
+                    <a href="index.html#teams">Teams</a>
+                    <a href="about.html">About</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SportsUP99. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/points-scripts.js"></script>
+</body>
+</html>

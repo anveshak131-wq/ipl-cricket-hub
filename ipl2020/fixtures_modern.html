@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Fixtures - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shared-modern.css">
+    <link rel="stylesheet" href="css/fixtures-styles.css">
+</head>
+<body>
+    <!-- Animated Mesh Background -->
+    <div class="mesh-background">
+        <div class="mesh-gradient mesh-gradient-1"></div>
+        <div class="mesh-gradient mesh-gradient-2"></div>
+        <div class="mesh-gradient mesh-gradient-3"></div>
+        <div class="mesh-gradient mesh-gradient-4"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo">
+                <span>IPL Cricket Hub</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#teams">Teams</a></li>
+                <li><a href="fixtures_modern.html" class="active">Fixtures</a></li>
+                <li><a href="points_modern.html">Points</a></li>
+                <li><a href="scores_modern.html">Scores</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <div class="header-badge">
+                <span>📅 Season 19 Schedule</span>
+            </div>
+            <h1>MATCH FIXTURES</h1>
+            <p>Complete schedule of all IPL matches. Stay updated with match timings, venues, and live match information.</p>
+            
+            <!-- Filter Controls -->
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">
+                    📋
+                    All Matches
+                </button>
+                <button class="filter-btn" data-filter="upcoming">
+                    ⏰
+                    Upcoming
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                    ✓
+                    Completed
+                </button>
+                <button class="filter-btn" data-filter="live">
+                    🔴
+                    Live
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Match Stats Overview -->
+    <section class="stats-overview">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card reveal">
+                    <div class="stat-icon">🏏</div>
+                    <div class="stat-number" id="totalMatches">0</div>
+                    <div class="stat-label">Total Matches</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-icon">📍</div>
+                    <div class="stat-number" id="venues">TBD</div>
+                    <div class="stat-label">Venues</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-number" id="daysLeft">TBD</div>
+                    <div class="stat-label">Days of Cricket</div>
+                </div>
+                <div class="stat-card reveal">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-number" id="liveNow">0</div>
+                    <div class="stat-label">Live Now</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fixtures Section -->
+    <section class="fixtures-section">
+        <div class="container">
+            <div id="fixturesContainer" class="fixtures-container">
+                <!-- Fixtures will be loaded dynamically -->
+            </div>
+            
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="spinner"></div>
+                <p>Loading fixtures...</p>
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                📅
+                <h3>No Matches Found</h3>
+                <p>Try selecting a different filter</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="container">
+            <div class="actions-grid reveal">
+                <a href="points_modern.html" class="action-card">
+                    <div class="action-icon">��</div>
+                    <h3>Points Table</h3>
+                    <p>Check team standings</p>
+                    →
+                </a>
+                <a href="scores_modern.html" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <h3>Live Scores</h3>
+                    <p>Real-time match updates</p>
+                    →
+                </a>
+                <a href="index.html#teams" class="action-card">
+                    <div class="action-icon">👥</div>
+                    <h3>Teams</h3>
+                    <p>Explore all squads</p>
+                    →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>IPL Cricket Hub</h3>
+                    <p>Your ultimate destination for IPL fixtures, scores, and updates.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#teams">Teams</a>
+                    <a href="points_modern.html">Points</a>
+                    <a href="scores_modern.html">Scores</a>
+                    <a href="about.html">About</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SportsUP99. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/fixtures-scripts.js"></script>
+</body>
+</html>

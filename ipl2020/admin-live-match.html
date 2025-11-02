@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Match Control - IPL Cricket Hub Admin</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-live-match-modern.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo">
+                <span>Live Match Control</span>
+            </a>
+            <div class="nav-actions">
+                <a href="live-match-updates.html" class="btn-view-live" target="_blank">
+                    <i class="fas fa-tv"></i> View Live Page
+                </a>
+                <a href="admin-upload.html" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        
+        <!-- Hero Section with Live Status -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="broadcast-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <div class="hero-text">
+                        <h1>Live Match Control Center</h1>
+                        <p>Real-time match management with AI-powered insights</p>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="live-status-indicator">
+                        <div class="status-info">
+                            <span class="status-label">Match Status</span>
+                            <span class="status-text" id="liveStatusLabel">Inactive</span>
+                        </div>
+                        <label class="modern-toggle">
+                            <input type="checkbox" id="liveToggle" onchange="toggleLiveStatus()">
+                            <span class="toggle-track">
+                                <span class="toggle-thumb"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="two-column-layout">
+            <!-- Left Column - Forms -->
+            <div class="forms-column">
+                
+                <!-- Match Stats Form -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Match Statistics</h3>
+                        <button class="btn-help" title="Update current match statistics">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Powerplay Score</label>
+                                <input type="text" id="powerplayScore" placeholder="e.g., 62/2" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Boundaries</label>
+                                <input type="text" id="boundaries" placeholder="e.g., 18 (14x4, 4x6)" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Current Partnership</label>
+                                <input type="text" id="partnership" placeholder="e.g., 85 runs (3rd wkt)" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Win Probability (Team A %)</label>
+                                <input type="number" id="winProbability" placeholder="e.g., 62" min="0" max="100" class="form-input">
+                            </div>
+                        </div>
+                        <button class="btn-submit" onclick="updateMatchStats()">
+                            <i class="fas fa-save"></i> Update Stats
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Partnership Form -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Current Partnership</h3>
+                        <button class="btn-clear" onclick="clearPartnership()">Clear</button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Batsman 1 -->
+                        <div class="player-section">
+                            <label class="section-label">Batsman 1 (On Strike)</label>
+                            <div class="drag-drop-area" id="batsman1Drop" ondrop="dropPlayer(event, 'batsman1')" ondragover="allowDrop(event)">
+                                <i class="fas fa-hand-pointer"></i>
+                                <p>Drag player here or select below</p>
+                            </div>
+                            <select id="batsman1Select" class="form-input" onchange="selectPlayer('batsman1')">
+                                <option value="">-- Select Batsman --</option>
+                            </select>
+                            <div class="player-stats-input">
+                                <input type="text" id="batsman1Runs" placeholder="Runs (balls)" class="form-input-small">
+                                <input type="text" id="batsman1Boundaries" placeholder="4s x 6s" class="form-input-small">
+                            </div>
+                        </div>
+
+                        <!-- Batsman 2 -->
+                        <div class="player-section">
+                            <label class="section-label">Batsman 2</label>
+                            <div class="drag-drop-area" id="batsman2Drop" ondrop="dropPlayer(event, 'batsman2')" ondragover="allowDrop(event)">
+                                <i class="fas fa-hand-pointer"></i>
+                                <p>Drag player here or select below</p>
+                            </div>
+                            <select id="batsman2Select" class="form-input" onchange="selectPlayer('batsman2')">
+                                <option value="">-- Select Batsman --</option>
+                            </select>
+                            <div class="player-stats-input">
+                                <input type="text" id="batsman2Runs" placeholder="Runs (balls)" class="form-input-small">
+                                <input type="text" id="batsman2Boundaries" placeholder="4s x 6s" class="form-input-small">
+                            </div>
+                        </div>
+
+                        <button class="btn-submit" onclick="updatePartnership()">
+                            <i class="fas fa-save"></i> Update Partnership
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Bowler Form -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bowling-ball"></i> Current Bowler</h3>
+                        <button class="btn-clear" onclick="clearBowler()">Clear</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="player-section">
+                            <div class="drag-drop-area" id="bowlerDrop" ondrop="dropPlayer(event, 'bowler')" ondragover="allowDrop(event)">
+                                <i class="fas fa-hand-pointer"></i>
+                                <p>Drag bowler here or select below</p>
+                            </div>
+                            <select id="bowlerSelect" class="form-input" onchange="selectPlayer('bowler')">
+                                <option value="">-- Select Bowler --</option>
+                            </select>
+                            <div class="form-group">
+                                <label>Bowling Figures</label>
+                                <input type="text" id="bowlerStats" placeholder="e.g., 3.3-0-32-1 (Overs-Maidens-Runs-Wickets)" class="form-input">
+                            </div>
+                        </div>
+                        <button class="btn-submit" onclick="updateBowler()">
+                            <i class="fas fa-save"></i> Update Bowler
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Insights Form -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-brain"></i> AI Insights</h3>
+                        <button class="btn-ai" onclick="generateAIInsight()">
+                            <i class="fas fa-magic"></i> Generate with AI
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>AI Analysis</label>
+                            <textarea id="aiInsight" rows="4" class="form-textarea" placeholder="Enter AI-powered match analysis or click 'Generate with AI' for suggestions..."></textarea>
+                        </div>
+                        <button class="btn-submit" onclick="updateAIInsight()">
+                            <i class="fas fa-save"></i> Update AI Insight
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Key Moment Form -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star"></i> Add Key Moment</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Moment Type</label>
+                            <select id="momentType" class="form-input">
+                                <option value="wicket">Wicket</option>
+                                <option value="six">Six</option>
+                                <option value="four">Four</option>
+                                <option value="milestone">Milestone (50/100)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" id="momentDesc" placeholder="e.g., V Kohli c Dhoni b Jadeja" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Over</label>
+                            <input type="text" id="momentOver" placeholder="e.g., 15.4" class="form-input">
+                        </div>
+                        <button class="btn-submit" onclick="addKeyMoment()">
+                            <i class="fas fa-plus"></i> Add Key Moment
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column - Player Drag List & Preview -->
+            <div class="preview-column">
+                
+                <!-- Match Selection from Fixtures -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Select Match</h3>
+                        <button class="btn-help" onclick="loadFixtures()" title="Refresh fixtures">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <select id="fixtureSelect" class="form-input" onchange="selectFixture()">
+                            <option value="">-- Select from Fixtures --</option>
+                        </select>
+                        <div id="selectedMatch" style="display: none; margin-top: 15px; padding: 15px; background: rgba(0, 217, 255, 0.1); border-radius: 10px; text-align: center;">
+                            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 5px;" id="matchTitle"></div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;" id="matchInfo"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Selection (Manual Override) -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-shield-alt"></i> Teams (Manual Override)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Team A (Batting First)</label>
+                            <select id="teamASelect" class="form-input" onchange="loadBothTeamsPlayers()">
+                                <option value="">-- Select Team A --</option>
+                                <option value="RCB">Royal Challengers Bangalore</option>
+                                <option value="MI">Mumbai Indians</option>
+                                <option value="CSK">Chennai Super Kings</option>
+                                <option value="KKR">Kolkata Knight Riders</option>
+                                <option value="DC">Delhi Capitals</option>
+                                <option value="SRH">Sunrisers Hyderabad</option>
+                                <option value="RR">Rajasthan Royals</option>
+                                <option value="PBSK">Punjab Kings</option>
+                                <option value="GT">Gujarat Titans</option>
+                                <option value="LSG">Lucknow Super Giants</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Team B (Bowling First)</label>
+                            <select id="teamBSelect" class="form-input" onchange="loadBothTeamsPlayers()">
+                                <option value="">-- Select Team B --</option>
+                                <option value="RCB">Royal Challengers Bangalore</option>
+                                <option value="MI">Mumbai Indians</option>
+                                <option value="CSK">Chennai Super Kings</option>
+                                <option value="KKR">Kolkata Knight Riders</option>
+                                <option value="DC">Delhi Capitals</option>
+                                <option value="SRH">Sunrisers Hyderabad</option>
+                                <option value="RR">Rajasthan Royals</option>
+                                <option value="PBSK">Punjab Kings</option>
+                                <option value="GT">Gujarat Titans</option>
+                                <option value="LSG">Lucknow Super Giants</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Players List (Draggable) -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list"></i> Team Players</h3>
+                        <span class="player-count" id="playerCount">0 players</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="players-list" id="playersList">
+                            <div class="empty-state">
+                                <i class="fas fa-users-slash"></i>
+                                <p>Select a team to view players</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Moments Preview -->
+                <div class="control-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list-alt"></i> Posted Key Moments</h3>
+                        <button class="btn-clear" onclick="clearAllMoments()">Clear All</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="moments-preview" id="momentsPreview">
+                            <div class="empty-state">
+                                <i class="fas fa-star-half-alt"></i>
+                                <p>No key moments posted yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="js/admin-live-match.js"></script>
+</body>
+</html>

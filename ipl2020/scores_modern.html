@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Scores - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shared-modern.css">
+    <link rel="stylesheet" href="css/scores-styles.css">
+</head>
+<body>
+    <!-- Animated Mesh Background -->
+    <div class="mesh-background">
+        <div class="mesh-gradient mesh-gradient-1"></div>
+        <div class="mesh-gradient mesh-gradient-2"></div>
+        <div class="mesh-gradient mesh-gradient-3"></div>
+        <div class="mesh-gradient mesh-gradient-4"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo">
+                <span>IPL Cricket Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#teams">Teams</a></li>
+                <li><a href="fixtures_modern.html">Fixtures</a></li>
+                <li><a href="points_modern.html">Points</a></li>
+                <li><a href="scores_modern.html" class="active">Scores</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-container">
+            <div class="header-badge">
+                <span>🔴 Live Scores</span>
+            </div>
+            <h1>MATCH CENTER</h1>
+            <p>Real-time scores, ball-by-ball commentary, and live match updates</p>
+        </div>
+    </section>
+
+    <!-- Pre-Season State -->
+    <section class="pre-season-section">
+        <div class="container">
+            <div class="pre-season-content">
+                <div class="trophy-animation">
+                    <div class="trophy-circle"></div>
+                    <div class="trophy-icon">🏏</div>
+                </div>
+                <h2 class="pre-season-title">Season Starts Soon!</h2>
+                <p class="pre-season-subtitle">
+                    Get ready for the most electrifying T20 cricket tournament.<br>
+                    Live scores and match updates will appear here once the action begins!
+                </p>
+                <div class="countdown-info">
+                    <div class="info-card">
+                        <div class="info-icon">📅</div>
+                        <div class="info-content">
+                            <h3>Match Schedule</h3>
+                            <p>Check upcoming fixtures</p>
+                            <a href="fixtures_modern.html" class="info-link">View Fixtures →</a>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🏆</div>
+                        <div class="info-content">
+                            <h3>Points Table</h3>
+                            <p>Track team standings</p>
+                            <a href="points_modern.html" class="info-link">View Table →</a>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">👥</div>
+                        <div class="info-content">
+                            <h3>Team Squads</h3>
+                            <p>Explore player rosters</p>
+                            <a href="index.html#teams" class="info-link">View Teams →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Info -->
+    <section class="features-info">
+        <div class="container">
+            <h2 class="features-title">What to Expect</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Live Updates</h3>
+                    <p>Real-time ball-by-ball coverage of every match</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h3>Detailed Stats</h3>
+                    <p>Comprehensive batting and bowling statistics</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💬</div>
+                    <h3>Commentary</h3>
+                    <p>Expert analysis and live match commentary</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Match Insights</h3>
+                    <p>Key moments, milestones, and highlights</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 SportsUP99. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // FREE CricAPI Configuration
+        // Sign up at https://www.cricapi.com/ to get your FREE API key
+        const CRICAPI_KEY = 'YOUR_FREE_API_KEY'; // Replace with your free key
+        const CRICAPI_URL = 'https://api.cricapi.com/v1/currentMatches';
+
+        // Scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animated trophy
+        const trophy = document.querySelector('.trophy-animation');
+        if (trophy) {
+            setInterval(() => {
+                trophy.classList.add('pulse');
+                setTimeout(() => {
+                    trophy.classList.remove('pulse');
+                }, 1000);
+            }, 3000);
+        }
+
+        // Check for live matches
+        async function checkLiveMatches() {
+            // Check if API key is set
+            if (CRICAPI_KEY === 'YOUR_FREE_API_KEY') {
+                console.log('⚠️ Please add your FREE CricAPI key!');
+                console.log('Get it from: https://www.cricapi.com/');
+                showPreSeasonState();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${CRICAPI_URL}?apikey=${CRICAPI_KEY}&offset=0`);
+                
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                
+                const data = await response.json();
+                
+                // Check if there are any IPL matches
+                const iplMatches = data.data?.filter(match => 
+                    match.series?.includes('Indian Premier League') || 
+                    match.matchType === 'ipl'
+                ) || [];
+                
+                if (iplMatches.length > 0) {
+                    // Show live matches
+                    displayLiveMatches(iplMatches);
+                    hidePreSeasonState();
+                } else {
+                    // No matches, show pre-season
+                    showPreSeasonState();
+                }
+                
+                // Save to localStorage (cache)
+                localStorage.setItem('cached_matches', JSON.stringify(iplMatches));
+                localStorage.setItem('last_update', new Date().toISOString());
+                
+            } catch (error) {
+                console.error('Error fetching matches:', error);
+                
+                // Try to load cached data
+                const cached = localStorage.getItem('cached_matches');
+                if (cached) {
+                    const matches = JSON.parse(cached);
+                    if (matches.length > 0) {
+                        displayLiveMatches(matches);
+                        hidePreSeasonState();
+                    } else {
+                        showPreSeasonState();
+                    }
+                } else {
+                    showPreSeasonState();
+                }
+            }
+        }
+
+        function showPreSeasonState() {
+            document.querySelector('.pre-season-section').style.display = 'block';
+            const liveSection = document.getElementById('liveMatchesSection');
+            if (liveSection) liveSection.style.display = 'none';
+        }
+
+        function hidePreSeasonState() {
+            document.querySelector('.pre-season-section').style.display = 'none';
+            const liveSection = document.getElementById('liveMatchesSection');
+            if (liveSection) liveSection.style.display = 'block';
+        }
+
+        function displayLiveMatches(matches) {
+            let liveSection = document.getElementById('liveMatchesSection');
+            
+            if (!liveSection) {
+                // Create live matches section
+                liveSection = document.createElement('section');
+                liveSection.id = 'liveMatchesSection';
+                liveSection.className = 'live-matches-section';
+                liveSection.innerHTML = `
+                    <div class="container">
+                        <h2 class="section-title">LIVE MATCHES</h2>
+                        <div id="matchesContainer" class="matches-grid"></div>
+                    </div>
+                `;
+                
+                const preSeasonSection = document.querySelector('.pre-season-section');
+                preSeasonSection.parentNode.insertBefore(liveSection, preSeasonSection);
+            }
+            
+            const container = document.getElementById('matchesContainer');
+            container.innerHTML = '';
+            
+            matches.forEach(match => {
+                const card = createMatchCard(match);
+                container.appendChild(card);
+            });
+        }
+
+        function createMatchCard(match) {
+            const card = document.createElement('div');
+            card.className = 'match-card';
+            
+            const status = match.status || 'Upcoming';
+            const team1 = match.teams?.[0] || match.teamInfo?.[0]?.shortname || 'Team 1';
+            const team2 = match.teams?.[1] || match.teamInfo?.[1]?.shortname || 'Team 2';
+            const score1 = match.score?.[0] || 'Yet to bat';
+            const score2 = match.score?.[1] || 'Yet to bat';
+            
+            card.innerHTML = `
+                <div class="match-header">
+                    <span class="match-type">${match.matchType || 'IPL'}</span>
+                    <span class="match-status ${status.toLowerCase()}">${status}</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team">
+                        <h3>${team1}</h3>
+                        <p class="score">${score1}</p>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="team">
+                        <h3>${team2}</h3>
+                        <p class="score">${score2}</p>
+                    </div>
+                </div>
+                <div class="match-info">
+                    <p>${match.venue || 'Venue TBA'}</p>
+                    <p>${new Date(match.dateTimeGMT).toLocaleDateString()}</p>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Check for matches on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLiveMatches();
+            
+            // Update every 2 minutes (120 seconds)
+            // This uses ~90 requests during a 3-hour match (within 100/day free limit)
+            setInterval(checkLiveMatches, 120000);
+        });
+
+        // Manual refresh button
+        function manualRefresh() {
+            checkLiveMatches();
+            alert('Scores refreshed! ✅');
+        }
+    </script>
+</body>
+</html>

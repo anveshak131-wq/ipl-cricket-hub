@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manual Data Entry - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/index.ico" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary-gradient);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: rgba(220, 53, 69, 0.2);
+            border: 2px solid #dc3545;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .warning-box i {
+            color: #dc3545;
+            font-size: 1.5rem;
+        }
+
+        .upload-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 2rem;
+        }
+
+        .upload-section h2 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .upload-section h2 i {
+            color: #ffd700;
+        }
+
+        .upload-section p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .upload-form {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus {
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group select option {
+            background: #333;
+            color: white;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            margin-top: 2rem;
+        }
+
+        .file-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            background: rgba(40, 167, 69, 0.2);
+            border: 2px solid #28a745;
+            color: #28a745;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(220, 53, 69, 0.2);
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .requirements-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+            border-left: 4px solid #ffd700;
+        }
+
+        .requirements-box h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .requirements-box ul {
+            color: rgba(255, 255, 255, 0.8);
+            padding-left: 2rem;
+            line-height: 2;
+        }
+
+        .requirements-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="warning-box">
+            🔒
+            <strong> ADMIN ONLY - </strong> This page is for administrators to manage IPL Cricket Hub data. All data entry is manual; no file uploads are supported.
+        </div>
+
+        <div class="header">
+            <h1>⚙️ IPL Admin Panel</h1>
+            <p>Manually manage all IPL Cricket Hub data for the website. <b>File/CSV upload is disabled.</b></p>
+        </div>
+
+        <div class="upload-section">
+            <h2>📅+ Add Fixtures - Manual Entry</h2>
+            <p>Add fixtures directly. All changes are saved to your browser and reflected on the website.</p>
+            <div class="upload-form">
+                <div class="success-message" id="fixturesManualSuccess"></div>
+                <div class="error-message" id="fixturesManualError"></div>
+                <div id="fixturesManualList"></div>
+                <button class="btn" onclick="addFixtureRow()" style="margin-top: 1rem; background: linear-gradient(45deg, #28a745, #20c997);">
+                    + Add Fixture
+                </button>
+                <button class="btn" onclick="saveFixturesManual()" style="margin-top: 1rem;">
+                    💾 Save Fixtures
+                </button>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2>👥 Add Players - Manual Entry</h2>
+            <p>Add players directly. All changes are saved to your browser and reflected on the website.</p>
+            <div class="upload-form">
+                <div class="form-group">
+                    <label style="color:white;">Select Team</label>
+                    <select id="teamSelectManual" style="width:100%;padding:0.8rem;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:white;">
+                        <option value="">Select team</option>
+                        <option value="RCB">RCB</option>
+                        <option value="MI">MI</option>
+                        <option value="CSK">CSK</option>
+                        <option value="SRH">SRH</option>
+                        <option value="KXIP">KXIP</option>
+                        <option value="KKR">KKR</option>
+                        <option value="DC">DC</option>
+                        <option value="RR">RR</option>
+                        <option value="GT">GT</option>
+                        <option value="LSG">LSG</option>
+                    </select>
+                </div>
+                <div id="playersList"></div>
+                <button class="btn" onclick="addPlayerRow()" style="margin-top: 1rem; background: linear-gradient(45deg, #28a745, #20c997);">
+                    + Add Player
+                </button>
+                <button class="btn" onclick="savePlayers()" style="margin-top: 1rem;">
+                    💾 Save Players
+                </button>
+                <div class="success-message" id="playersManualSuccess"></div>
+                <div class="error-message" id="playersManualError"></div>
+            </div>
+        </div>
+
+        <div class="upload-section" style="margin-top:2rem;">
+            <h2 style="color:white;">Players for Selected Team</h2>
+            <div id="uploadedPlayersContainer">
+                <p style="color:rgba(255,255,255,0.7);">Select a team to view players.</p>
+            </div>
+        </div>
+
+        <div class="upload-section" style="margin-top:2rem;">
+            <h2 style="color:white;">Fixtures Preview</h2>
+            <div id="uploadedFixturesContainer">
+                <p style="color:rgba(255,255,255,0.7);">No fixtures added yet.</p>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2>�� Add Points Table - Manual Entry</h2>
+            <p>Add points table rows directly. All changes are saved to your browser and reflected on the website.</p>
+            <div class="upload-form">
+                <div id="pointsManualList"></div>
+                <button class="btn" onclick="addPointsRow()" style="margin-top: 1rem; background: linear-gradient(45deg, #28a745, #20c997);">
+                    + Add Row
+                </button>
+                <button class="btn" onclick="savePointsManual()" style="margin-top: 1rem;">
+                    💾 Save Points Table
+                </button>
+                <div class="success-message" id="pointsManualSuccess"></div>
+                <div class="error-message" id="pointsManualError"></div>
+            </div>
+        </div>
+
+        <div class="upload-section" style="margin-top:2rem;">
+            <h2 style="color:white;">Points Table Preview</h2>
+            <div id="uploadedPointsContainer">
+                <p style="color:rgba(255,255,255,0.7);">No points table added yet.</p>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2>⚙️ Manage Data</h2>
+            <p>View and manage all manually entered data.</p>
+            <div class="upload-form">
+                <p style="color: rgba(255, 255, 255, 0.8);">All data is stored in your browser (localStorage).</p>
+                <button class="btn btn-back" onclick="window.location.href='index.html'">
+                    ← Back to Website
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Manual Fixtures Entry
+        const TEAM_OPTIONS = [
+            'RCB','MI','CSK','SRH','KXIP','KKR','DC','RR','GT','LSG'
+        ];
+        const VENUE_OPTIONS = [
+            'M Chinnaswamy Stadium', 'MA Chidambaram Stadium', 'Wankhede Stadium', 'Eden Gardens', 'Arun Jaitley Stadium',
+            'Narendra Modi Stadium', 'Sawai Mansingh Stadium', 'Rajiv Gandhi Intl. Stadium', 'Punjab Cricket Association IS Bindra Stadium',
+            'Ekana Cricket Stadium', 'Other'
+        ];
+        const TIME_OPTIONS = [
+            '15:30', '19:30', '20:00', '16:00', 'Other'
+        ];
+        let fixtureCount = 0;
+        function addFixtureRow() {
+            fixtureCount++;
+            const list = document.getElementById('fixturesManualList');
+            const row = document.createElement('div');
+            row.className = 'fixture-row';
+            row.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 1px solid rgba(255,255,255,0.1);';
+            row.id = `fixture-${fixtureCount}`;
+            row.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: white; margin: 0;">📅 Fixture ${fixtureCount}</h4>
+                    <button onclick="removeFixtureRow(${fixtureCount})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                        🗑️ Remove
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <div><label style="color: white;">Date</label><input type="date" class="fixture-date" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;"></div>
+                    <div><label style="color: white;">Team 1</label><select class="fixture-team1" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">${TEAM_OPTIONS.map(t=>`<option value='${t}'>${t}</option>`).join('')}</select></div>
+                    <div><label style="color: white;">Team 2</label><select class="fixture-team2" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">${TEAM_OPTIONS.map(t=>`<option value='${t}'>${t}</option>`).join('')}</select></div>
+                    <div><label style="color: white;">Venue</label><select class="fixture-venue" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">${VENUE_OPTIONS.map(v=>`<option value='${v}'>${v}</option>`).join('')}</select></div>
+                    <div><label style="color: white;">Time</label><select class="fixture-time" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">${TIME_OPTIONS.map(t=>`<option value='${t}'>${t}</option>`).join('')}</select></div>
+                    <div><label style="color: white;">Status</label><select class="fixture-status" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;"><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="completed">Completed</option></select></div>
+                </div>
+            `;
+            list.appendChild(row);
+        }
+        function removeFixtureRow(id) {
+            const row = document.getElementById(`fixture-${id}`);
+            if (row) row.remove();
+        }
+        function saveFixturesManual() {
+            const rows = document.querySelectorAll('.fixture-row');
+            if (!rows.length) {
+                document.getElementById('fixturesManualError').innerText = 'Please add at least one fixture.';
+                document.getElementById('fixturesManualError').style.display = 'block';
+                return;
+            }
+            const fixtures = [];
+            rows.forEach(row => {
+                const date = row.querySelector('.fixture-date')?.value || '';
+                const team1 = row.querySelector('.fixture-team1')?.value || '';
+                const team2 = row.querySelector('.fixture-team2')?.value || '';
+                const venue = row.querySelector('.fixture-venue')?.value || '';
+                const time = row.querySelector('.fixture-time')?.value || '';
+                const status = row.querySelector('.fixture-status')?.value || '';
+                if (date && team1 && team2 && venue && time && status) {
+                    fixtures.push({date, team1, team2, venue, time, status});
+                }
+            });
+            if (!fixtures.length) {
+                document.getElementById('fixturesManualError').innerText = 'Please fill all fields for at least one fixture.';
+                document.getElementById('fixturesManualError').style.display = 'block';
+                return;
+            }
+            localStorage.setItem('uploaded_fixtures', JSON.stringify(fixtures));
+            document.getElementById('fixturesManualSuccess').innerText = fixtures.length + ' fixture(s) saved!';
+            document.getElementById('fixturesManualSuccess').style.display = 'block';
+            document.getElementById('fixturesManualError').style.display = 'none';
+            showUploadedFixtures();
+            document.getElementById('fixturesManualList').innerHTML = '';
+            fixtureCount = 0;
+        }
+
+        // Manual Players Entry
+        let playerCount = 0;
+
+        function addPlayerRow() {
+            playerCount++;
+            const playersList = document.getElementById('playersList');
+            const row = document.createElement('div');
+            row.className = 'player-row';
+            row.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 1px solid rgba(255,255,255,0.1);';
+            row.id = `player-${playerCount}`;
+            
+            row.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: white; margin: 0;">👤 Player ${playerCount}</h4>
+                    <button onclick="removePlayerRow(${playerCount})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                        🗑️ Remove
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Name</label>
+                        <input type="text" class="player-name" placeholder="Virat Kohli" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Role</label>
+                        <select class="player-role" onchange="toggleAllRounderType(this)" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select role</option>
+                            <option value="Batsman">Batsman</option>
+                            <option value="Bowler">Bowler</option>
+                            <option value="All-rounder">All-rounder</option>
+                            <option value="Wicket-keeper">Wicket-keeper</option>
+                        </select>
+                    </div>
+                    <div class="allrounder-type-container" style="display: none;">
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">All-rounder Type</label>
+                        <select class="player-allrounder-type" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select type</option>
+                            <option value="Batting All-rounder">Batting All-rounder</option>
+                            <option value="Bowling All-rounder">Bowling All-rounder</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Age</label>
+                        <input type="number" class="player-age" placeholder="35" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Nationality</label>
+                        <select class="player-nationality" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select nationality</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Australian">Australian</option>
+                            <option value="English">English</option>
+                            <option value="South African">South African</option>
+                            <option value="New Zealander">New Zealander</option>
+                            <option value="Sri Lankan">Sri Lankan</option>
+                            <option value="Afghan">Afghan</option>
+                            <option value="Bangladeshi">Bangladeshi</option>
+                            <option value="West Indian">West Indian</option>
+                            <option value="Pakistani">Pakistani</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Batting Style</label>
+                        <select class="player-batting" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select style</option>
+                            <option value="Right-handed">Right-handed</option>
+                            <option value="Left-handed">Left-handed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Bowling Style</label>
+                        <select class="player-bowling" onchange="toggleOtherBowlingInput(this)" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select style</option>
+                            <option value="Right-arm fast">Right-arm fast</option>
+                            <option value="Right-arm medium">Right-arm medium</option>
+                            <option value="Right-arm offbreak">Right-arm offbreak</option>
+                            <option value="Right-arm legbreak">Right-arm legbreak</option>
+                            <option value="Left-arm fast">Left-arm fast</option>
+                            <option value="Left-arm medium">Left-arm medium</option>
+                            <option value="Left-arm orthodox">Left-arm orthodox</option>
+                            <option value="Left-arm chinaman">Left-arm chinaman</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" class="player-bowling-other" placeholder="Specify bowling style" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; margin-top: 0.5rem; display: none;" />
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Captain</label>
+                        <input type="checkbox" class="player-captain" style="transform: scale(1.3); margin-right: 0.5rem;"> <span style="color:white;">Is Captain</span>
+                    </div>
+                    <div>
+                        <label style="color: white; display: block; margin-bottom: 0.5rem;">Vice-Captain</label>
+                        <input type="checkbox" class="player-vice-captain" style="transform: scale(1.3); margin-right: 0.5rem;"> <span style="color:white;">Is Vice-Captain</span>
+                    </div>
+                </div>
+            `;
+            playersList.appendChild(row);
+        }
+
+        function removePlayerRow(id) {
+            const row = document.getElementById(`player-${id}`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        function toggleOtherBowlingInput(selectEl) {
+            const otherInput = selectEl.parentElement.querySelector('.player-bowling-other');
+            if (selectEl.value === 'Other') {
+                otherInput.style.display = 'block';
+            } else {
+                otherInput.style.display = 'none';
+                otherInput.value = '';
+            }
+        }
+
+        function toggleAllRounderType(selectEl) {
+            const playerRow = selectEl.closest('.player-row');
+            const allrounderTypeContainer = playerRow.querySelector('.allrounder-type-container');
+            const allrounderTypeSelect = playerRow.querySelector('.player-allrounder-type');
+            
+            if (selectEl.value === 'All-rounder') {
+                allrounderTypeContainer.style.display = 'block';
+            } else {
+                allrounderTypeContainer.style.display = 'none';
+                allrounderTypeSelect.value = '';
+            }
+        }
+
+        function savePlayers() {
+            const team = document.getElementById('teamSelectManual').value;
+            if (!team) {
+                showError('playersManualError', 'Please select a team');
+                return;
+            }
+
+            const playerRows = document.querySelectorAll('.player-row');
+            if (playerRows.length === 0) {
+                showError('playersManualError', 'Please add at least one player');
+                return;
+            }
+
+            // Get existing players from localStorage
+            const key = `uploaded_${team.toLowerCase()}_players`;
+            let existing = [];
+            try { existing = JSON.parse(localStorage.getItem(key)||'[]'); } catch {}
+            // Defensive: handle both 'name' and 'Name', normalize, and deduplicate
+            const nameMap = {};
+            existing.forEach(p => {
+                const n = (p.name||p.Name||'').replace(/\s+/g, ' ').trim().toLowerCase();
+                if (n) nameMap[n] = p;
+            });
+
+            let foundCaptain = false, foundViceCaptain = false;
+            playerRows.forEach(row => {
+                let bowlingStyle = row.querySelector('.player-bowling')?.value || '';
+                if (bowlingStyle === 'Other') {
+                    const otherVal = row.querySelector('.player-bowling-other')?.value.trim();
+                    if (otherVal) bowlingStyle = otherVal;
+                }
+                const playerRole = row.querySelector('.player-role')?.value || '';
+                const allrounderType = row.querySelector('.player-allrounder-type')?.value || '';
+                
+                const player = {
+                    name: row.querySelector('.player-name')?.value.trim() || '',
+                    role: playerRole,
+                    'allrounder type': allrounderType,
+                    age: row.querySelector('.player-age')?.value || '',
+                    nationality: row.querySelector('.player-nationality')?.value || '',
+                    'batting style': row.querySelector('.player-batting')?.value || '',
+                    'bowling style': bowlingStyle,
+                    image: '',
+                    isCaptain: row.querySelector('.player-captain')?.checked || false,
+                    isViceCaptain: row.querySelector('.player-vice-captain')?.checked || false
+                };
+                if (player.isCaptain) foundCaptain = true;
+                if (player.isViceCaptain) foundViceCaptain = true;
+                if (player.name) {
+                    // Mark foreign players
+                    if (player.nationality && player.nationality.toLowerCase() !== 'indian' && player.nationality.toLowerCase() !== 'india') {
+                        player.isForeign = true;
+                    }
+                    // Merge: update if exists, add if new
+                    const n = player.name.replace(/\s+/g, ' ').trim().toLowerCase();
+                    nameMap[n] = player;
+                }
+            });
+            // Final unique list, sorted by name for consistency
+            const mergedPlayers = Object.values(nameMap).sort((a, b) => (a.name||a.Name||'').localeCompare(b.name||b.Name||''));
+            localStorage.setItem(key, JSON.stringify(mergedPlayers));
+
+            // Show success
+            const successEl = document.getElementById('playersManualSuccess');
+            let msg = `<i class=\"fas fa-check-circle\"></i> ${mergedPlayers.length} player(s) saved for ${team}!`;
+            if (foundCaptain) msg += ' <span style="color:gold;">(Captain set)</span>';
+            if (foundViceCaptain) msg += ' <span style="color:deepskyblue;">(Vice-Captain set)</span>';
+            successEl.innerHTML = msg;
+            successEl.style.display = 'block';
+
+            // Clear form
+            document.getElementById('playersList').innerHTML = '';
+            playerCount = 0;
+
+            console.log(`Saved ${mergedPlayers.length} unique players for ${team}`);
+            showUploadedPlayers(team);
+        }
+
+        // Get country flag emoji
+        function getCountryFlag(nationality) {
+            const flags = {
+                'india': '🇮🇳', 'indian': '🇮🇳',
+                'australia': '🇦🇺', 'australian': '🇦🇺',
+                'england': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'english': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+                'south africa': '🇿🇦', 'south african': '🇿🇦',
+                'new zealand': '🇳🇿', 'new zealander': '🇳🇿',
+                'west indies': '🏴', 'west indian': '🏴',
+                'pakistan': '🇵🇰', 'pakistani': '🇵🇰',
+                'bangladesh': '🇧🇩', 'bangladeshi': '🇧🇩',
+                'sri lanka': '🇱🇰', 'sri lankan': '🇱🇰',
+                'afghanistan': '🇦🇫', 'afghan': '🇦🇫',
+                'nepal': '🇳🇵', 'nepali': '🇳🇵', 'nepalese': '🇳🇵',
+                'zimbabwe': '🇿🇼', 'zimbabwean': '🇿🇼',
+                'ireland': '🇮🇪', 'irish': '🇮🇪',
+                'scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'scottish': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+                'netherlands': '🇳🇱', 'dutch': '🇳🇱',
+                'usa': '🇺🇸', 'america': '🇺🇸', 'american': '🇺🇸',
+                'canada': '🇨🇦', 'canadian': '🇨🇦'
+            };
+            const nat = (nationality || '').toLowerCase().trim();
+            return flags[nat] || '🌍';
+        }
+
+        // Show uploaded players for selected team
+        function showUploadedPlayers(team) {
+            const container = document.getElementById('uploadedPlayersContainer');
+            if (!team) {
+                container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">Select a team to view players.</p>';
+                return;
+            }
+            const key = `uploaded_${team.toLowerCase()}_players`;
+            const data = localStorage.getItem(key);
+            if (!data) {
+                container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">No players uploaded for this team.</p>';
+                return;
+            }
+            let players;
+            try {
+                players = JSON.parse(data);
+            } catch {
+                container.innerHTML = '<p style="color:#ff6b6b;">Error parsing player data.</p>';
+                return;
+            }
+            if (!players.length) {
+                container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">No players uploaded for this team.</p>';
+                return;
+            }
+            // Sort: Batsman > Wicket-keeper > All-rounder > Bowler, then by age (desc)
+            const roleOrder = {
+                'batsman': 1,
+                'wicket-keeper': 2,
+                'all-rounder': 3,
+                'bowler': 4
+            };
+            players.sort((a, b) => {
+                const roleA = (a.role||a.Role||'').toLowerCase();
+                const roleB = (b.role||b.Role||'').toLowerCase();
+                const orderA = roleOrder[roleA] || 99;
+                const orderB = roleOrder[roleB] || 99;
+                if (orderA !== orderB) return orderA - orderB;
+                // Age descending (higher age first)
+                const ageA = parseInt(a.age||a.Age||'0', 10) || 0;
+                const ageB = parseInt(b.age||b.Age||'0', 10) || 0;
+                return ageB - ageA;
+            });
+            let html = `<table style="width:100%;color:white;background:rgba(0,0,0,0.2);border-radius:10px;overflow:hidden;border-collapse:separate;border-spacing:0;">
+                <thead><tr><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Name</th><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Role</th><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">AR Type</th><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Age</th><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Nationality</th><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Batting</th><th style="padding:12px 15px;text-align:left;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Bowling</th><th style="padding:12px 15px;text-align:center;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Captain</th><th style="padding:12px 15px;text-align:center;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Vice-Captain</th><th style="padding:12px 15px;text-align:center;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">WK</th><th style="padding:12px 15px;text-align:center;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Foreign</th><th style="padding:12px 15px;text-align:center;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Edit</th><th style="padding:12px 15px;text-align:center;border-bottom:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">Delete</th></tr></thead><tbody>`;
+            players.forEach((p, i) => {
+                const arType = p['allrounder type']||p['Allrounder Type']||'';
+                const arTypeDisplay = arType ? `<span style="color:#51cf66;font-weight:600;background:rgba(81,207,102,0.15);padding:4px 8px;border-radius:6px;">${arType}</span>` : '';
+                const nationality = p.nationality||p.Nationality||'';
+                const flag = getCountryFlag(nationality);
+                const natDisplay = nationality ? `${flag} ${nationality}` : '';
+                const playerName = p.name||p.Name||'';
+                const escapedName = playerName.replace(/'/g, "\\'");
+                html += `<tr id='player-row-${i}' style="border-bottom:1px solid rgba(255,255,255,0.05);background:${i%2===0?'rgba(255,255,255,0.02)':'transparent'};" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='${i%2===0?'rgba(255,255,255,0.02)':'transparent'}'">
+                    <td style="padding:10px 15px;"><span id='name-${i}'>${playerName}</span></td>
+                    <td style="padding:10px 15px;"><span id='role-${i}'>${p.role||p.Role||''}</span></td>
+                    <td style="padding:10px 15px;"><span id='artype-${i}'>${arTypeDisplay}</span></td>
+                    <td style="padding:10px 15px;"><span id='age-${i}'>${p.age||p.Age||''}</span></td>
+                    <td style="padding:10px 15px;"><span id='nat-${i}'>${natDisplay}</span></td>
+                    <td style="padding:10px 15px;"><span id='bat-${i}'>${p['batting style']||p.Batting||p['Batting Style']||''}</span></td>
+                    <td style="padding:10px 15px;"><span id='bowl-${i}'>${p['bowling style']||p.Bowling||p['Bowling Style']||''}</span></td>
+                    <td style="padding:10px 15px;text-align:center;">${p.isCaptain ? '<span title="Captain" style="color:gold;font-weight:bold;">&#9733; C</span>' : ''}</td>
+                    <td style="padding:10px 15px;text-align:center;">${p.isViceCaptain ? '<span title="Vice-Captain" style="color:deepskyblue;font-weight:bold;">&#9734; VC</span>' : ''}</td>
+                    <td style="padding:10px 15px;text-align:center;">${(p.role||p.Role||'').toLowerCase()==='wicket-keeper' ? '<span title="Wicket-Keeper" style="color:#ffb347;font-weight:bold;">WK</span>' : ''}</td>
+                    <td style="padding:10px 15px;text-align:center;">${p.isForeign ? '<span title="Foreign Player" style="color:#ff6b6b;font-size:1.2em;">🌏</span>' : ''}</td>
+                    <td style="padding:10px 15px;text-align:center;"><button onclick='editPlayerByName("${escapedName}")' style="background:#4CAF50;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">✏️ Edit</button></td>
+                    <td style="padding:10px 15px;text-align:center;"><button onclick='deletePlayerByName("${escapedName}")' style="background:#f44336;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">🗑️ Delete</button></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // Edit player by name (unique identifier)
+        function editPlayerByName(playerName) {
+            const team = document.getElementById('teamSelectManual').value;
+            if (!team) return;
+            const key = `uploaded_${team.toLowerCase()}_players`;
+            const players = JSON.parse(localStorage.getItem(key)||'[]');
+            const idx = players.findIndex(p => (p.name||p.Name||'') === playerName);
+            if (idx === -1) return;
+            const player = players[idx] || {};
+            const row = document.getElementById(`player-row-${idx}`);
+            if (!row) return;
+            
+            for (const field of ['name','role','artype','age','nat','bat','bowl']) {
+                const span = document.getElementById(`${field}-${idx}`);
+                if (span) {
+                    let val = span.textContent;
+                    // For artype, get from original data to avoid styled content
+                    if (field === 'artype') {
+                        val = player['allrounder type'] || player['Allrounder Type'] || '';
+                    }
+                    // For nationality, remove flag emoji if present
+                    if (field === 'nat') {
+                        val = player.nationality || player.Nationality || '';
+                    }
+                    span.innerHTML = `<input type='text' value='${val}' style='width:90px;'>`;
+                }
+            }
+            // Captain, Vice, Foreign as checkboxes (using already declared 'player' variable)
+            row.children[7].innerHTML = `<input type='checkbox' id='edit-captain-${idx}' ${player.isCaptain?'checked':''}>`;
+            row.children[8].innerHTML = `<input type='checkbox' id='edit-vice-${idx}' ${player.isViceCaptain?'checked':''}>`;
+            row.children[9].innerHTML = `<input type='checkbox' id='edit-foreign-${idx}' ${player.isForeign?'checked':''} disabled title='Foreign status is auto-detected by nationality'>`;
+            const escapedName = playerName.replace(/'/g, "\\'");
+            row.querySelector('button[onclick^="editPlayerByName"]').outerHTML = `<button onclick='savePlayerByName("${escapedName}")' style="background:#2196F3;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">💾 Save</button>`;
+        }
+
+        // Save edited player by name
+        function savePlayerByName(originalName) {
+            const team = document.getElementById('teamSelectManual').value;
+            if (!team) return;
+            const key = `uploaded_${team.toLowerCase()}_players`;
+            let players = JSON.parse(localStorage.getItem(key)||'[]');
+            const idx = players.findIndex(p => (p.name||p.Name||'') === originalName);
+            if (idx === -1) return;
+            const fields = ['name','role','artype','age','nat','bat','bowl','img'];
+            const player = {};
+            fields.forEach(f => {
+                const input = document.querySelector(`#${f}-${idx} input`);
+                player[
+                    f==='nat' ? 'nationality' :
+                    f==='bat' ? 'batting style' :
+                    f==='bowl' ? 'bowling style' :
+                    f==='artype' ? 'allrounder type' :
+                    f==='img' ? 'image' : f
+                ] = input ? input.value.trim() : '';
+            });
+            player.isCaptain = document.getElementById(`edit-captain-${idx}`)?.checked || false;
+            player.isViceCaptain = document.getElementById(`edit-vice-${idx}`)?.checked || false;
+            // Mark foreign
+            player.isForeign = player.nationality && !['indian','india'].includes(player.nationality.toLowerCase());
+            
+            // Update player at index (no duplicate check needed - we're replacing existing player)
+            players[idx] = player;
+            localStorage.setItem(key, JSON.stringify(players));
+            showUploadedPlayers(team);
+        }
+
+        // Delete player by name (with confirmation)
+        function deletePlayerByName(playerName) {
+            const team = document.getElementById('teamSelectManual').value;
+            if (!team) return;
+            const key = `uploaded_${team.toLowerCase()}_players`;
+            let players = JSON.parse(localStorage.getItem(key)||'[]');
+            
+            // Find player by name
+            const idx = players.findIndex(p => (p.name||p.Name||'') === playerName);
+            if (idx === -1) {
+                alert('Player not found!');
+                return;
+            }
+            
+            // Confirm deletion
+            if (!confirm(`Are you sure you want to delete ${playerName}?`)) {
+                return;
+            }
+            
+            // Delete only this specific player
+            players.splice(idx, 1);
+            localStorage.setItem(key, JSON.stringify(players));
+            showUploadedPlayers(team);
+        }
+
+        // Fixtures preview/edit
+        function showUploadedFixtures() {
+            const container = document.getElementById('uploadedFixturesContainer');
+            const data = localStorage.getItem('uploaded_fixtures');
+            if (!data) {
+                container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">No fixtures yet.</p>';
+                return;
+            }
+            let fixtures;
+            try { fixtures = JSON.parse(data); } catch { container.innerHTML = '<p style="color:#ff6b6b;">Error parsing fixtures data.</p>'; return; }
+            if (!fixtures.length) { container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">No fixtures yet.</p>'; return; }
+            let html = `<table style="width:100%;color:white;background:rgba(0,0,0,0.2);border-radius:10px;overflow:hidden;">
+                <thead><tr><th>Date</th><th>Team 1</th><th>Team 2</th><th>Venue</th><th>Time</th><th>Status</th><th>Edit</th><th>Delete</th></tr></thead><tbody>`;
+            fixtures.forEach((f,i)=>{
+                html += `<tr id='fixture-row-${i}'>
+                    <td><span id='fdate-${i}'>${f.date||''}</span></td>
+                    <td><span id='ft1-${i}'>${f.team1||''}</span></td>
+                    <td><span id='ft2-${i}'>${f.team2||''}</span></td>
+                    <td><span id='fvenue-${i}'>${f.venue||''}</span></td>
+                    <td><span id='ftime-${i}'>${f.time||''}</span></td>
+                    <td><span id='fstatus-${i}'>${f.status||''}</span></td>
+                    <td><button onclick='editFixture(${i})'>Edit</button></td>
+                    <td><button onclick='deleteFixture(${i})'>Delete</button></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        function editFixture(idx) {
+            const row = document.getElementById(`fixture-row-${idx}`);
+            if (!row) return;
+            // Date stays input, others become dropdowns
+            const fdate = document.getElementById(`fdate-${idx}`);
+            if (fdate) {
+                const val = fdate.textContent;
+                fdate.innerHTML = `<input type='date' value='${val}' style='width:110px;'>`;
+            }
+            const ft1 = document.getElementById(`ft1-${idx}`);
+            if (ft1) {
+                const val = ft1.textContent;
+                ft1.innerHTML = `<select>${TEAM_OPTIONS.map(t=>`<option value='${t}'${t===val?' selected':''}>${t}</option>`).join('')}</select>`;
+            }
+            const ft2 = document.getElementById(`ft2-${idx}`);
+            if (ft2) {
+                const val = ft2.textContent;
+                ft2.innerHTML = `<select>${TEAM_OPTIONS.map(t=>`<option value='${t}'${t===val?' selected':''}>${t}</option>`).join('')}</select>`;
+            }
+            const fvenue = document.getElementById(`fvenue-${idx}`);
+            if (fvenue) {
+                const val = fvenue.textContent;
+                fvenue.innerHTML = `<select>${VENUE_OPTIONS.map(v=>`<option value='${v}'${v===val?' selected':''}>${v}</option>`).join('')}</select>`;
+            }
+            const ftime = document.getElementById(`ftime-${idx}`);
+            if (ftime) {
+                const val = ftime.textContent;
+                ftime.innerHTML = `<select>${TIME_OPTIONS.map(t=>`<option value='${t}'${t===val?' selected':''}>${t}</option>`).join('')}</select>`;
+            }
+            const fstatus = document.getElementById(`fstatus-${idx}`);
+            if (fstatus) {
+                const val = fstatus.textContent;
+                fstatus.innerHTML = `<select><option value="upcoming"${val==='upcoming'?' selected':''}>Upcoming</option><option value="live"${val==='live'?' selected':''}>Live</option><option value="completed"${val==='completed'?' selected':''}>Completed</option></select>`;
+            }
+            row.querySelector('button[onclick^="editFixture"]').outerHTML = `<button onclick='saveFixture(${idx})'>Save</button>`;
+        }
+        function saveFixture(idx) {
+            let fixtures = JSON.parse(localStorage.getItem('uploaded_fixtures')||'[]');
+            const fdate = document.querySelector(`#fdate-${idx} input`);
+            const ft1 = document.querySelector(`#ft1-${idx} select`);
+            const ft2 = document.querySelector(`#ft2-${idx} select`);
+            const fvenue = document.querySelector(`#fvenue-${idx} select`);
+            const ftime = document.querySelector(`#ftime-${idx} select`);
+            const fstatus = document.querySelector(`#fstatus-${idx} select`);
+            fixtures[idx] = {
+                date: fdate ? fdate.value : '',
+                team1: ft1 ? ft1.value : '',
+                team2: ft2 ? ft2.value : '',
+                venue: fvenue ? fvenue.value : '',
+                time: ftime ? ftime.value : '',
+                status: fstatus ? fstatus.value : ''
+            };
+            localStorage.setItem('uploaded_fixtures', JSON.stringify(fixtures));
+            showUploadedFixtures();
+        }
+        function deleteFixture(idx) {
+            let fixtures = JSON.parse(localStorage.getItem('uploaded_fixtures')||'[]');
+            fixtures.splice(idx,1);
+            localStorage.setItem('uploaded_fixtures', JSON.stringify(fixtures));
+            showUploadedFixtures();
+        }
+
+        // Points table manual entry
+        let pointsRowCount = 0;
+
+        function addPointsRow() {
+            pointsRowCount++;
+            const list = document.getElementById('pointsManualList');
+            const row = document.createElement('div');
+            row.className = 'points-row';
+            row.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin: 1rem 0; border: 1px solid rgba(255,255,255,0.1);';
+            row.id = `points-${pointsRowCount}`;
+            
+            const TEAM_NAMES = {
+                'MI': 'Mumbai Indians',
+                'CSK': 'Chennai Super Kings',
+                'RCB': 'Royal Challengers Bangalore',
+                'KKR': 'Kolkata Knight Riders',
+                'DC': 'Delhi Capitals',
+                'SRH': 'Sunrisers Hyderabad',
+                'RR': 'Rajasthan Royals',
+                'KXIP': 'Punjab Kings',
+                'GT': 'Gujarat Titans',
+                'LSG': 'Lucknow Super Giants'
+            };
+            
+            row.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: white; margin: 0;">�� Team Entry ${pointsRowCount}</h4>
+                    <button onclick="removePointsRow(${pointsRowCount})" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                        🗑️ Remove
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <div>
+                        <label style="color: white;">Team</label>
+                        <select class="points-team" onchange="autoFillTeamName(this)" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="">Select Team</option>
+                            ${Object.keys(TEAM_NAMES).map(t=>`<option value="${t}">${t}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color: white;">Full Name (Auto-filled)</label>
+                        <input type="text" class="points-name" readonly style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white;">Matches</label>
+                        <input type="number" class="points-matches" value="0" min="0" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white;">Won</label>
+                        <input type="number" class="points-won" value="0" min="0" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white;">Lost</label>
+                        <input type="number" class="points-lost" value="0" min="0" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white;">No Result</label>
+                        <input type="number" class="points-nr" value="0" min="0" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white;">Points</label>
+                        <input type="number" class="points-points" value="0" min="0" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                    <div>
+                        <label style="color: white;">NRR</label>
+                        <input type="number" class="points-nrr" value="0.00" step="0.01" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    </div>
+                </div>
+            `;
+            list.appendChild(row);
+        }
+
+        function removePointsRow(id) {
+            const row = document.getElementById(`points-${id}`);
+            if (row) row.remove();
+        }
+
+        function autoFillTeamName(selectEl) {
+            const TEAM_NAMES = {
+                'MI': 'Mumbai Indians',
+                'CSK': 'Chennai Super Kings',
+                'RCB': 'Royal Challengers Bangalore',
+                'KKR': 'Kolkata Knight Riders',
+                'DC': 'Delhi Capitals',
+                'SRH': 'Sunrisers Hyderabad',
+                'RR': 'Rajasthan Royals',
+                'KXIP': 'Punjab Kings',
+                'GT': 'Gujarat Titans',
+                'LSG': 'Lucknow Super Giants'
+            };
+            const row = selectEl.closest('.points-row');
+            const nameInput = row.querySelector('.points-name');
+            if (nameInput) {
+                nameInput.value = TEAM_NAMES[selectEl.value] || '';
+            }
+        }
+
+        function savePointsManual() {
+            const rows = document.querySelectorAll('.points-row');
+            if (!rows.length) {
+                document.getElementById('pointsManualError').innerText = 'Please add at least one team.';
+                document.getElementById('pointsManualError').style.display = 'block';
+                return;
+            }
+
+            const LOGO_MAP = {
+                'MI': 'mi_logo_new.svg',
+                'CSK': 'csk_logo_new.svg',
+                'RCB': 'rcb_logo_new.svg',
+                'KKR': 'kkr_logo_new.svg',
+                'DC': 'dc_logo_new.svg',
+                'SRH': 'srh_logo_new.svg',
+                'RR': 'rr_logo_new.svg',
+                'KXIP': 'kxip_logo_new.svg',
+                'GT': 'gt_logo_new.svg',
+                'LSG': 'lsg_logo_new.svg'
+            };
+
+            const pointsData = [];
+            let rank = 1;
+
+            rows.forEach(row => {
+                const short = row.querySelector('.points-team')?.value || '';
+                const name = row.querySelector('.points-name')?.value || '';
+                const matches = parseInt(row.querySelector('.points-matches')?.value || 0);
+                const won = parseInt(row.querySelector('.points-won')?.value || 0);
+                const lost = parseInt(row.querySelector('.points-lost')?.value || 0);
+                const nr = parseInt(row.querySelector('.points-nr')?.value || 0);
+                const points = parseInt(row.querySelector('.points-points')?.value || 0);
+                const nrr = parseFloat(row.querySelector('.points-nrr')?.value || 0);
+
+                if (short && name) {
+                    pointsData.push({
+                        rank: rank++,
+                        name: name,
+                        short: short,
+                        logo: LOGO_MAP[short] || 'ipl_logo_new.svg',
+                        matches: matches,
+                        won: won,
+                        lost: lost,
+                        nr: nr,
+                        points: points,
+                        nrr: nrr,
+                        form: [],
+                        qualified: rank <= 5 ? (rank <= 4) : false
+                    });
+                }
+            });
+
+            if (!pointsData.length) {
+                document.getElementById('pointsManualError').innerText = 'Please fill all fields for at least one team.';
+                document.getElementById('pointsManualError').style.display = 'block';
+                return;
+            }
+
+            // Sort by points (descending), then by NRR
+            pointsData.sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                return b.nrr - a.nrr;
+            });
+
+            // Update ranks and qualification status after sorting
+            pointsData.forEach((team, index) => {
+                team.rank = index + 1;
+                team.qualified = index < 4;
+            });
+
+            // Save to the correct localStorage key that points_modern.html expects
+            localStorage.setItem('ipl_points_table', JSON.stringify(pointsData));
+
+            document.getElementById('pointsManualSuccess').innerText = `${pointsData.length} team(s) saved! Points table updated.`;
+            document.getElementById('pointsManualSuccess').style.display = 'block';
+            document.getElementById('pointsManualError').style.display = 'none';
+
+            // Clear form
+            document.getElementById('pointsManualList').innerHTML = '';
+            pointsRowCount = 0;
+
+            // Show preview
+            showUploadedPoints();
+        }
+
+        // Points table preview/edit
+        function showUploadedPoints() {
+            const container = document.getElementById('uploadedPointsContainer');
+            const data = localStorage.getItem('ipl_points_table');
+            if (!data) {
+                container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">No points table yet.</p>';
+                return;
+            }
+            let points;
+            try { points = JSON.parse(data); } catch { container.innerHTML = '<p style="color:#ff6b6b;">Error parsing points data.</p>'; return; }
+            if (!points.length) { container.innerHTML = '<p style="color:rgba(255,255,255,0.7);">No points table yet.</p>'; return; }
+            
+            // Sort by rank
+            points.sort((a, b) => a.rank - b.rank);
+            
+            let html = `<table style="width:100%;color:white;background:rgba(0,0,0,0.2);border-radius:10px;overflow:hidden;border-collapse:collapse;">
+                <thead><tr style="background:rgba(0,0,0,0.3);">
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">Rank</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">Team</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">M</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">W</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">L</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">NR</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">Pts</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">NRR</th>
+                    <th style="padding:12px;border-bottom:2px solid rgba(255,255,255,0.1);">Qualified</th>
+                </tr></thead><tbody>`;
+            
+            points.forEach((p,i)=>{
+                const bgColor = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+                const qualifiedBadge = p.qualified ? '<span style="color:#10B981;font-weight:bold;">✓ Yes</span>' : '<span style="color:#6B7280;">No</span>';
+                const rankBadge = p.rank === 1 ? '<span style="color:#FFD700;font-size:1.2em;">🏆 1</span>' : p.rank;
+                
+                html += `<tr style="background:${bgColor};">
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);">${rankBadge}</td>
+                    <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.05);"><strong>${p.short}</strong> - ${p.name}</td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);">${p.matches}</td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);color:#10B981;font-weight:bold;">${p.won}</td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);color:#EF4444;">${p.lost}</td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);">${p.nr}</td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);"><strong style="color:#FFD700;font-size:1.1em;">${p.points}</strong></td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);color:${p.nrr >= 0 ? '#10B981' : '#EF4444'};">${p.nrr >= 0 ? '+' : ''}${p.nrr.toFixed(2)}</td>
+                    <td style="padding:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05);">${qualifiedBadge}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            html += '<p style="margin-top:1rem;color:rgba(255,255,255,0.6);font-size:0.9rem;"><i class="fas fa-info-circle"></i> Data is automatically sorted by Points then NRR. Top 4 teams qualify for playoffs.</p>';
+            container.innerHTML = html;
+        }
+
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.innerText = message;
+                el.style.display = 'block';
+                setTimeout(() => { el.style.display = 'none'; }, 5000);
+            }
+        }
+
+        // Hook into team select
+        const teamSelectManual = document.getElementById('teamSelectManual');
+        if (teamSelectManual) teamSelectManual.addEventListener('change', e => showUploadedPlayers(e.target.value));
+        // Show on load if team selected
+        window.addEventListener('DOMContentLoaded',()=>{
+            const team = teamSelectManual && teamSelectManual.value;
+            if (team) showUploadedPlayers(team);
+            showUploadedFixtures();
+            showUploadedPoints();
+        });
+    </script>
+</body>
+</html>
+

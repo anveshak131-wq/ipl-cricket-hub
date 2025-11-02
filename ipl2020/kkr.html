@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolkata Knight Riders - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shared-modern.css">
+    <link rel="stylesheet" href="css/team-styles.css">
+</head>
+<body>
+    <!-- Animated Mesh Background -->
+    <div class="mesh-background">
+        <div class="mesh-gradient mesh-gradient-1"></div>
+        <div class="mesh-gradient mesh-gradient-2"></div>
+        <div class="mesh-gradient mesh-gradient-3"></div>
+        <div class="mesh-gradient mesh-gradient-4"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL Logo">
+                <span>IPL Cricket Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#teams">Teams</a></li>
+                <li><a href="fixtures_modern.html">Fixtures</a></li>
+                <li><a href="points_modern.html">Points</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Team Header -->
+    <section class="team-header">
+        <div class="team-header-container">
+            <div class="team-logo-hero">
+                <img src="assets/kkr_logo_new.svg" alt="KOLKATA KNIGHT RIDERS">
+            </div>
+            <h1 class="team-title">KOLKATA KNIGHT RIDERS</h1>
+            <p class="team-subtitle">Kolkata</p>
+            <div class="team-stats-bar">
+                <div class="team-stat">
+                    <div class="team-stat-number" id="playerCount">0</div>
+                    <div class="team-stat-label">Players</div>
+                </div>
+                <div class="team-stat">
+                    <div class="team-stat-number" id="foreignCount">0</div>
+                    <div class="team-stat-label">Overseas</div>
+                </div>
+                <div class="team-stat">
+                    <div class="team-stat-number" id="indianCount">0</div>
+                    <div class="team-stat-label">Indian</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Squad Section -->
+    <section class="squad-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">SQUAD 2026</h2>
+                <p class="section-subtitle">Meet our powerhouse lineup</p>
+            </div>
+            <div class="players-grid" id="playersContainer">
+                <!-- Players will be loaded dynamically from localStorage -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Player Details Modal -->
+    <div class="player-modal" id="playerModal">
+        <div class="player-modal-content">
+            <button class="modal-close" onclick="closePlayerModal()">&times;</button>
+            <div class="modal-player-header">
+                <div class="modal-player-logo">
+                    <img src="assets/kkr_logo_new.svg" alt="Player" id="modalPlayerLogo">
+                </div>
+                <h2 class="modal-player-name" id="modalPlayerName">Player Name</h2>
+                <p class="modal-player-role" id="modalPlayerRole">Role</p>
+                <div class="modal-player-badges" id="modalPlayerBadges">
+                    <!-- Badges will be added dynamically -->
+                </div>
+            </div>
+            <div class="modal-player-details" id="modalPlayerDetails">
+                <!-- Details will be added dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 SportsUP99. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    // Scroll effect
+    window.addEventListener('scroll', () => {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Display all players sorted by role and age in console
+    function displayAllPlayersByAge() {
+        const TEAM_OPTIONS = ['RCB', 'MI', 'CSK', 'SRH', 'PBSK', 'KKR', 'DC', 'RR', 'GT', 'LSG'];
+        const allPlayers = [];
+        
+        TEAM_OPTIONS.forEach(team => {
+            const key = `uploaded_${team.toLowerCase()}_players`;
+            try {
+                const players = JSON.parse(localStorage.getItem(key) || '[]');
+                players.forEach(player => {
+                    allPlayers.push({ ...player, team: team });
+                });
+            } catch(e) {}
+        });
+        
+        if (allPlayers.length === 0) {
+            console.log('%cNo players found in localStorage', 'color: #EF4444; font-size: 16px; font-weight: bold;');
+            return;
+        }
+        
+        const roleOrder = { 'batsman': 1, 'wicket-keeper': 2, 'all-rounder': 3, 'bowler': 4 };
+        allPlayers.sort((a, b) => {
+            const orderA = roleOrder[(a.role || '').toLowerCase()] || 99;
+            const orderB = roleOrder[(b.role || '').toLowerCase()] || 99;
+            if (orderA !== orderB) return orderA - orderB;
+            return parseInt(b.age || 0) - parseInt(a.age || 0);
+        });
+        
+        console.log('%c═══════════════════════════════════════════════════', 'color: #FFD700; font-weight: bold;');
+        console.log('%c🏏 ALL IPL Cricket Hub PLAYERS - SORTED BY ROLE & AGE', 'color: #00D9FF; font-size: 20px; font-weight: bold;');
+        console.log('%c═══════════════════════════════════════════════════', 'color: #FFD700; font-weight: bold;');
+        console.log(`%cTotal Players: ${allPlayers.length}`, 'color: #10B981; font-size: 14px; font-weight: bold;');
+        console.log('');
+        
+        let currentRole = '';
+        let roleCount = 0;
+        const roleEmoji = { 'BATSMAN': '🏏', 'WICKET-KEEPER': '🧤', 'ALL-ROUNDER': '⚡', 'BOWLER': '🎯' };
+        
+        allPlayers.forEach(player => {
+            const role = (player.role || 'Unknown').toUpperCase();
+            if (role !== currentRole) {
+                if (roleCount > 0) {
+                    console.log(`%c   └─ Total: ${roleCount} players`, 'color: #A1A1AA; font-style: italic;');
+                    console.log('');
+                }
+                currentRole = role;
+                roleCount = 0;
+                console.log(`%c${roleEmoji[role] || '👤'} ${role}S`, 'color: #FF4655; font-size: 16px; font-weight: bold; text-decoration: underline;');
+                console.log('%c───────────────────────────────────────────────────', 'color: #4B5563;');
+            }
+            roleCount++;
+            
+            const badges = [];
+            if (player.isCaptain) badges.push('👑 Captain');
+            if (player.isViceCaptain) badges.push('⭐ Vice-Captain');
+            if (player.isForeign) badges.push('🌏 Foreign');
+            const badgeText = badges.length > 0 ? ` [${badges.join(', ')}]` : '';
+            
+            console.log(
+                `%c   ${roleCount}. ${player.name || 'Unknown'}%c | Age: %c${player.age || 'N/A'}%c | Team: %c${player.team || 'N/A'}%c | ${player.nationality || 'Unknown'}${badgeText}`,
+                'color: #E4E4E7; font-weight: bold;',
+                'color: #A1A1AA;',
+                'color: #FFD700; font-weight: bold;',
+                'color: #A1A1AA;',
+                'color: #00D9FF; font-weight: bold;',
+                'color: #A1A1AA;'
+            );
+            
+            if (player['batting style'] || player['bowling style']) {
+                console.log(`%c      ↳ Batting: ${player['batting style'] || 'N/A'} | Bowling: ${player['bowling style'] || 'N/A'}`, 'color: #6B7280; font-size: 11px;');
+            }
+            if (player['allrounder type']) {
+                console.log(`%c      ↳ Type: ${player['allrounder type']}`, 'color: #10B981; font-size: 11px;');
+            }
+        });
+        
+        if (roleCount > 0) {
+            console.log(`%c   └─ Total: ${roleCount} players`, 'color: #A1A1AA; font-style: italic;');
+        }
+        
+        console.log('');
+        console.log('%c═══════════════════════════════════════════════════', 'color: #FFD700; font-weight: bold;');
+        console.log('%c✅ Complete player list displayed above', 'color: #10B981; font-size: 14px; font-weight: bold;');
+        console.log('%c═══════════════════════════════════════════════════', 'color: #FFD700; font-weight: bold;');
+    }
+
+    // Auto-display all players on load
+    setTimeout(() => displayAllPlayersByAge(), 1000);
+    console.log('%cType displayAllPlayersByAge() to view all players sorted by role & age', 'color: #FFD700; font-size: 12px;');
+
+    // Modal functions
+    function showPlayerModal(player) {
+        const modal = document.getElementById('playerModal');
+        const modalName = document.getElementById('modalPlayerName');
+        const modalRole = document.getElementById('modalPlayerRole');
+        const modalBadges = document.getElementById('modalPlayerBadges');
+        const modalDetails = document.getElementById('modalPlayerDetails');
+
+        // Set basic info
+        modalName.textContent = player.name || 'Unknown Player';
+        modalRole.textContent = player.role || 'Player';
+
+        // Set badges
+        let badgesHTML = '';
+        if (player.isCaptain) badgesHTML += '<span class="modal-badge badge-captain">👑 Captain</span>';
+        if (player.isViceCaptain) badgesHTML += '<span class="modal-badge badge-captain">⭐ Vice Captain</span>';
+        if (player.isForeign) badgesHTML += '<span class="modal-badge badge-foreign">🌏 Overseas</span>';
+        if ((player.role || '').toLowerCase() === 'wicket-keeper') badgesHTML += '<span class="modal-badge badge-wk">🧤 Wicket-Keeper</span>';
+        modalBadges.innerHTML = badgesHTML;
+
+        // Set detailed information
+        const allrounderType = player['allrounder type'] || player['Allrounder Type'] || '';
+        const detailsHTML = `
+            ${player.age ? `<div class="detail-item"><div class="detail-label">Age</div><div class="detail-value">${player.age}</div></div>` : ''}
+            ${player.nationality ? `<div class="detail-item"><div class="detail-label">Nationality</div><div class="detail-value">${player.nationality}</div></div>` : ''}
+            ${player['batting style'] || player.Batting ? `<div class="detail-item"><div class="detail-label">Batting Style</div><div class="detail-value">${player['batting style'] || player.Batting}</div></div>` : ''}
+            ${player['bowling style'] || player.Bowling ? `<div class="detail-item"><div class="detail-label">Bowling Style</div><div class="detail-value">${player['bowling style'] || player.Bowling}</div></div>` : ''}
+            ${allrounderType ? `<div class="detail-item"><div class="detail-label">All-Rounder Type</div><div class="detail-value">${allrounderType}</div></div>` : ''}
+        `;
+        modalDetails.innerHTML = detailsHTML;
+
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePlayerModal() {
+        const modal = document.getElementById('playerModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modal on background click
+    document.getElementById('playerModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closePlayerModal();
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePlayerModal();
+        }
+    });
+
+    // Load players from localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        const TEAM_KEY = 'kkr';
+        const storageKey = `uploaded_${TEAM_KEY.toLowerCase()}_players`;
+        const playersContainer = document.getElementById('playersContainer');
+        
+        try {
+            const playersData = localStorage.getItem(storageKey);
+            
+            if (playersData) {
+                const players = JSON.parse(playersData);
+                
+                if (players.length > 0) {
+                    // Sort players by role
+                    const roleOrder = {
+                        'batsman': 1,
+                        'wicket-keeper': 2,
+                        'all-rounder': 3,
+                        'bowler': 4
+                    };
+                    
+                    players.sort((a, b) => {
+                        const roleA = (a.role || '').toLowerCase();
+                        const roleB = (b.role || '').toLowerCase();
+                        const orderA = roleOrder[roleA] || 99;
+                        const orderB = roleOrder[roleB] || 99;
+                        
+                        // First sort by role
+                        if (orderA !== orderB) {
+                            return orderA - orderB;
+                        }
+                        
+                        // Then sort by age (high to low)
+                        const ageA = parseInt(a.age || 0);
+                        const ageB = parseInt(b.age || 0);
+                        return ageB - ageA;
+                    });
+                    
+                    // Update stats
+                    document.getElementById('playerCount').textContent = players.length;
+                    document.getElementById('foreignCount').textContent = players.filter(p => p.isForeign).length;
+                    document.getElementById('indianCount').textContent = players.filter(p => !p.isForeign).length;
+                    
+                    // Create player cards
+                    playersContainer.innerHTML = '';
+                    players.forEach(player => {
+                        const card = document.createElement('div');
+                        card.className = 'player-card';
+                        
+                        let badges = '';
+                        if (player.isCaptain) badges += '<span class="badge badge-captain">👑 Captain</span>';
+                        if (player.isViceCaptain) badges += '<span class="badge badge-captain">⭐ Vice Captain</span>';
+                        if (player.isForeign) badges += '<span class="badge badge-foreign">🌏 Overseas</span>';
+                        if ((player.role || '').toLowerCase() === 'wicket-keeper') badges += '<span class="badge badge-wk">🧤 WK</span>';
+                        
+                        card.innerHTML = `
+                            <div class="player-image">
+                                <img src="assets/kkr_logo_new.svg" alt="${player.name || 'Player'}" onerror="this.src='assets/ipl_logo_new.svg'">
+                            </div>
+                            <h3 class="player-name">${player.name || 'Unknown'}</h3>
+                            <p class="player-role">${player.role || 'Player'}</p>
+                            <div class="player-badges">
+                                ${badges}
+                            </div>
+                        `;
+                        
+                        // Add click event to show modal
+                        card.addEventListener('click', () => showPlayerModal(player));
+                        card.style.cursor = 'pointer';
+                        
+                        playersContainer.appendChild(card);
+                    });
+                } else {
+                    playersContainer.innerHTML = `
+                        <div class="no-players-message">
+                            <h3>Squad Announcement Coming Soon</h3>
+                            <p>Stay tuned for player updates!</p>
+                        </div>
+                    `;
+                }
+            } else {
+                playersContainer.innerHTML = `
+                    <div class="no-players-message">
+                        <h3>Squad Announcement Coming Soon</h3>
+                        <p>Stay tuned for player updates!</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading players:', error);
+            playersContainer.innerHTML = `
+                <div class="no-players-message">
+                    <h3>Error Loading Players</h3>
+                    <p>Please try refreshing the page.</p>
+                </div>
+            `;
+        }
+    });
+    </script>
+</body>
+</html>
