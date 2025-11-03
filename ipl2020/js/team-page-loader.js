@@ -53,22 +53,6 @@ async function loadTeamPlayers(teamCode) {
         }
     }
     
-    // Final fallback to bundled sample data
-    if (players.length === 0) {
-        try {
-            const response = await fetch('data/sample-players.json');
-            if (response.ok) {
-                const allTeamsData = await response.json();
-                players = allTeamsData[teamCode] || [];
-                if (players.length > 0) {
-                    console.log(`📄 Loaded ${players.length} sample players from JSON`);
-                }
-            }
-        } catch (e) {
-            console.warn('Sample data not available:', e.message);
-        }
-    }
-    
     // Display players or show message
     if (players.length > 0) {
         displayPlayers(players, teamCode);
