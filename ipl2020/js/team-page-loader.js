@@ -175,7 +175,8 @@ if (document.readyState === 'loading') {
 function initTeamPage() {
     // Try to detect team code from page URL or title
     const path = window.location.pathname;
-    const teamMatch = path.match(/\/([a-z]{2,5})\.html/i);
+    // Match both /rcb.html and /rcb
+    const teamMatch = path.match(/\/([a-z]{2,5})(\.html)?$/i);
     
     if (teamMatch) {
         const teamCode = teamMatch[1].toLowerCase();
