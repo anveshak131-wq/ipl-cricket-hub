@@ -497,6 +497,140 @@ def health_check():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'message': 'IPL 2026 API is running'}), 200
 
+# ============================================================================
+# PLAYER DATA ENDPOINTS
+# ============================================================================
+
+@app.route('/api/players/<team_code>', methods=['GET'])
+def get_team_players(team_code):
+    """Get all players for a specific team"""
+    team_code = team_code.lower()
+    
+    valid_teams = ['rcb', 'mi', 'csk', 'srh', 'kxip', 'kkr', 'dc', 'rr', 'gt', 'lsg']
+    
+    if team_code not in valid_teams:
+        return jsonify({'error': 'Invalid team code'}), 400
+    
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    # Create players table if not exists
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS players (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            team_code TEXT NOT NULL,
+            name TEXT NOT NULL,
+            role TEXT,
+            age INTEGER,
+            nationality TEXT,
+            is_foreign BOOLEAN DEFAULT 0,
+            is_captain BOOLEAN DEFAULT 0,
+            is_vice_captain BOOLEAN DEFAULT 0,
+            batting_style TEXT,
+            bowling_style TEXT,
+            allrounder_type TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(team_code, name)
+        )
+    ''')
+    
+    cursor.execute('''
+        SELECT name, role, age, nationality, is_foreign, is_captain, is_vice_captain,
+               batting_style, bowling_style, allrounder_type
+        FROM players
+        WHERE team_code = ?
+        ORDER BY
+            CASE role
+                WHEN 'Batsman' THEN 1
+                WHEN 'Wicket-Keeper' THEN 2
+                WHEN 'All-Rounder' THEN 3
+                WHEN 'Bowler' THEN 4
+                ELSE 5
+            END,
+            name
+    ''', (team_code,))
+    
+    players = []
+    for row in cursor.fetchall():
+        player = {
+            'name': row[0],
+            'role': row[1],
+            'age': row[2],
+            'nationality': row[3],
+            'isForeign': bool(row[4]),
+            'isCaptain': bool(row[5]),
+            'isViceCaptain': bool(row[6]),
+            'batting style': row[7],
+            'bowling style': row[8],
+            'allrounder type': row[9]
+        }
+        players.append({k: v for k, v in player.items() if v is not None})
+    
+    conn.close()
+    
+    return jsonify({
+        'success': True,
+        'team': team_code.upper(),
+        'count': len(players),
+        'players': players
+    }), 200
+
+@app.route('/api/players/<team_code>', methods=['POST'])
+@admin_required
+def upload_team_players(team_code, current_admin_id):
+    """Upload/update players for a team (Admin only)"""
+    team_code = team_code.lower()
+    
+    valid_teams = ['rcb', 'mi', 'csk', 'srh', 'kxip', 'kkr', 'dc', 'rr', 'gt', 'lsg']
+    
+    if team_code not in valid_teams:
+        return jsonify({'error': 'Invalid team code'}), 400
+    
+    data = request.get_json()
+    players = data.get('players', [])
+    
+    if not isinstance(players, list):
+        return jsonify({'error': 'Players must be an array'}), 400
+    
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    cursor.execute('DELETE FROM players WHERE team_code = ?', (team_code,))
+    
+    inserted = 0
+    for player in players:
+        try:
+            cursor.execute('''
+                INSERT INTO players (
+                    team_code, name, role, age, nationality, is_foreign,
+                    is_captain, is_vice_captain, batting_style, bowling_style, allrounder_type
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                team_code,
+                player.get('name'),
+                player.get('role'),
+                player.get('age'),
+                player.get('nationality'),
+                player.get('isForeign', False),
+                player.get('isCaptain', False),
+                player.get('isViceCaptain', False),
+                player.get('batting style') or player.get('Batting'),
+                player.get('bowling style') or player.get('Bowling'),
+                player.get('allrounder type') or player.get('Allrounder Type')
+            ))
+            inserted += 1
+        except Exception as e:
+            print(f"Error inserting player: {e}")
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({
+        'success': True,
+        'message': f'Uploaded {inserted} players for {team_code.upper()}',
+        'count': inserted
+    }), 200
+
 if __name__ == '__main__':
     print("🏏 IPL 2026 Secure Backend API Starting...")
     print("📊 Database initialized at:", DB_PATH)
