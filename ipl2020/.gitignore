@@ -57,3 +57,6 @@ ipl2020-deploy.zip
 *.HEIC
 *.heic
 
+# Files with secrets
+BITBUCKET_PUSH_INSTRUCTIONS.md
+
