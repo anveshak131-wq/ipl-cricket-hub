@@ -1,0 +1,18 @@
+{
+  "rcb": [
+    {"name": "Virat Kohli", "role": "Batsman", "age": 35, "nationality": "India", "isForeign": false, "isCaptain": false, "batting style": "Right-hand bat", "bowling style": "Right-arm medium"},
+    {"name": "Faf du Plessis", "role": "Batsman", "age": 39, "nationality": "South Africa", "isForeign": true, "isCaptain": true, "batting style": "Right-hand bat"},
+    {"name": "Glenn Maxwell", "role": "All-Rounder", "age": 35, "nationality": "Australia", "isForeign": true, "batting style": "Right-hand bat", "bowling style": "Right-arm off-break"},
+    {"name": "Mohammed Siraj", "role": "Bowler", "age": 29, "nationality": "India", "isForeign": false, "bowling style": "Right-arm fast"},
+    {"name": "Dinesh Karthik", "role": "Wicket-Keeper", "age": 38, "nationality": "India", "isForeign": false, "batting style": "Right-hand bat"}
+  ],
+  "mi": [
+    {"name": "Rohit Sharma", "role": "Batsman", "age": 36, "nationality": "India", "isForeign": false, "isCaptain": true, "batting style": "Right-hand bat"},
+    {"name": "Jasprit Bumrah", "role": "Bowler", "age": 30, "nationality": "India", "isForeign": false, "bowling style": "Right-arm fast"},
+    {"name": "Suryakumar Yadav", "role": "Batsman", "age": 33, "nationality": "India", "isForeign": false, "batting style": "Right-hand bat"}
+  ],
+  "csk": [
+    {"name": "MS Dhoni", "role": "Wicket-Keeper", "age": 42, "nationality": "India", "isForeign": false, "isCaptain": true, "batting style": "Right-hand bat"},
+    {"name": "Ravindra Jadeja", "role": "All-Rounder", "age": 35, "nationality": "India", "isForeign": false, "batting style": "Left-hand bat", "bowling style": "Left-arm orthodox"}
+  ]
+}
