@@ -107,6 +107,7 @@
         </div>
     </footer>
 
+    <script src="js/team-page-loader.js"></script>
     <script>
     // Scroll effect
     window.addEventListener('scroll', () => {
@@ -171,105 +172,6 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closePlayerModal();
-        }
-    });
-
-    // Load players from localStorage
-    document.addEventListener('DOMContentLoaded', function() {
-        const TEAM_KEY = 'rcb';
-        const storageKey = `uploaded_${TEAM_KEY.toLowerCase()}_players`;
-        const playersContainer = document.getElementById('playersContainer');
-        
-        try {
-            const playersData = localStorage.getItem(storageKey);
-            
-            if (playersData) {
-                const players = JSON.parse(playersData);
-                
-                if (players.length > 0) {
-                    // Sort players by role
-                    const roleOrder = {
-                        'batsman': 1,
-                        'wicket-keeper': 2,
-                        'all-rounder': 3,
-                        'bowler': 4
-                    };
-                    
-                    players.sort((a, b) => {
-                        const roleA = (a.role || '').toLowerCase();
-                        const roleB = (b.role || '').toLowerCase();
-                        const orderA = roleOrder[roleA] || 99;
-                        const orderB = roleOrder[roleB] || 99;
-                        
-                        // First sort by role
-                        if (orderA !== orderB) {
-                            return orderA - orderB;
-                        }
-                        
-                        // Then sort by age (high to low)
-                        const ageA = parseInt(a.age || 0);
-                        const ageB = parseInt(b.age || 0);
-                        return ageB - ageA;
-                    });
-                    
-                    // Update stats
-                    document.getElementById('playerCount').textContent = players.length;
-                    document.getElementById('foreignCount').textContent = players.filter(p => p.isForeign).length;
-                    document.getElementById('indianCount').textContent = players.filter(p => !p.isForeign).length;
-                    
-                    // Create player cards
-                    playersContainer.innerHTML = '';
-                    players.forEach(player => {
-                        const card = document.createElement('div');
-                        card.className = 'player-card';
-                        
-                        let badges = '';
-                        if (player.isCaptain) badges += '<span class="badge badge-captain">👑 Captain</span>';
-                        if (player.isViceCaptain) badges += '<span class="badge badge-captain">⭐ Vice Captain</span>';
-                        if (player.isForeign) badges += '<span class="badge badge-foreign">🌏 Overseas</span>';
-                        if ((player.role || '').toLowerCase() === 'wicket-keeper') badges += '<span class="badge badge-wk">🧤 WK</span>';
-                        
-                        card.innerHTML = `
-                            <div class="player-image">
-                                <img src="assets/rcb_logo_new.svg" alt="${player.name || 'Player'}" onerror="this.src='assets/ipl_logo_new.svg'">
-                            </div>
-                            <h3 class="player-name">${player.name || 'Unknown'}</h3>
-                            <p class="player-role">${player.role || 'Player'}</p>
-                            <div class="player-badges">
-                                ${badges}
-                            </div>
-                        `;
-                        
-                        // Add click event to show modal
-                        card.addEventListener('click', () => showPlayerModal(player));
-                        card.style.cursor = 'pointer';
-                        
-                        playersContainer.appendChild(card);
-                    });
-                } else {
-                    playersContainer.innerHTML = `
-                        <div class="no-players-message">
-                            <h3>Squad Announcement Coming Soon</h3>
-                            <p>Stay tuned for player updates!</p>
-                        </div>
-                    `;
-                }
-            } else {
-                playersContainer.innerHTML = `
-                    <div class="no-players-message">
-                        <h3>Squad Announcement Coming Soon</h3>
-                        <p>Stay tuned for player updates!</p>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Error loading players:', error);
-            playersContainer.innerHTML = `
-                <div class="no-players-message">
-                    <h3>Error Loading Players</h3>
-                    <p>Please try refreshing the page.</p>
-                </div>
-            `;
         }
     });
 
