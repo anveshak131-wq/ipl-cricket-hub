@@ -299,6 +299,14 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-weight: 500;
+}
+
+.quick-emoji {
+    font-size: 1.2rem;
+    display: inline-block;
+    line-height: 1;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
 }
 
 .quick-btn:hover {
@@ -306,6 +314,12 @@
     border-color: var(--chat-primary);
     color: white;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 70, 85, 0.3);
+}
+
+.quick-btn:hover .quick-emoji {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
 }
 
 /* Typing Indicator */
