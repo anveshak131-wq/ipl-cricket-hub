@@ -222,9 +222,6 @@ function openEditPanel(playerId) {
     document.getElementById('editBestBowling').value = stats.bestBowling || '';
     document.getElementById('editFiveWickets').value = stats.fiveWickets || 0;
     document.getElementById('editFourWickets').value = stats.fourWickets || 0;
-    document.getElementById('editCatches').value = stats.catches || 0;
-    document.getElementById('editStumpings').value = stats.stumpings || 0;
-    document.getElementById('editRunOuts').value = stats.runOuts || 0;
 
     // Open panel
     document.getElementById('editPanel').classList.add('open');
@@ -274,10 +271,7 @@ async function savePlayerStats(event) {
             economy: parseFloat(document.getElementById('editEconomy').value) || 0,
             bestBowling: document.getElementById('editBestBowling').value,
             fiveWickets: parseInt(document.getElementById('editFiveWickets').value) || 0,
-            fourWickets: parseInt(document.getElementById('editFourWickets').value) || 0,
-            catches: parseInt(document.getElementById('editCatches').value) || 0,
-            stumpings: parseInt(document.getElementById('editStumpings').value) || 0,
-            runOuts: parseInt(document.getElementById('editRunOuts').value) || 0
+            fourWickets: parseInt(document.getElementById('editFourWickets').value) || 0
         }
     };
 
