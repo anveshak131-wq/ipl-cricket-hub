@@ -570,6 +570,47 @@ footer {
     color: white;
 }
 
+/* Stats Section in Modal */
+.stats-section {
+    grid-column: 1 / -1;
+    background: rgba(0, 217, 255, 0.05);
+    border: 1px solid rgba(0, 217, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.stats-section h4 {
+    color: var(--secondary);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-item span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.stat-item strong {
+    color: var(--accent);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .team-title {

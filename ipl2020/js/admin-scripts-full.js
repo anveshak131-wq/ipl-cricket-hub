@@ -107,32 +107,70 @@ function savePlayers() {
     let existing = [];
     try { existing = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
     
+    // If editing, remove the old player first to avoid duplicates
+    if (currentEditingPlayerName) {
+        existing = existing.filter(p => p.name !== currentEditingPlayerName);
+    }
+    
     const nameMap = {};
     existing.forEach(p => { if(p.name) nameMap[p.name.toLowerCase()] = p; });
     
     playerRows.forEach(row => {
+        const playerName = row.querySelector('.player-name')?.value.trim() || '';
+        const existingPlayer = existing.find(p => p.name === playerName);
+        
         const player = {
-            name: row.querySelector('.player-name')?.value.trim() || '',
+            name: playerName,
             role: row.querySelector('.player-role')?.value || '',
             'allrounder type': row.querySelector('.player-allrounder-type')?.value || '',
             age: row.querySelector('.player-age')?.value || '',
             nationality: row.querySelector('.player-nationality')?.value || '',
             'batting style': row.querySelector('.player-batting')?.value || '',
             'bowling style': row.querySelector('.player-bowling')?.value || '',
-            image: '',
+            image: existingPlayer?.image || '',
             isCaptain: row.querySelector('.player-captain')?.checked || false,
-            isViceCaptain: row.querySelector('.player-vice-captain')?.checked || false
+            isViceCaptain: row.querySelector('.player-vice-captain')?.checked || false,
+            stats: existingPlayer?.stats || {} // Preserve existing stats if any
         };
         if (player.nationality && player.nationality.toLowerCase() !== 'indian') player.isForeign = true;
         if (player.name) nameMap[player.name.toLowerCase()] = player;
     });
     
+    // Save to localStorage
     localStorage.setItem(key, JSON.stringify(Object.values(nameMap)));
-    showSuccess('playersManualSuccess', `${Object.keys(nameMap).length} player(s) saved for ${team}!`);
+    
+    // Also save to Vercel KV API
+    saveToVercelKV(team, Object.values(nameMap));
+    
+    const message = currentEditingPlayerName ? `Player updated successfully!` : `${Object.keys(nameMap).length} player(s) saved for ${team}!`;
+    showSuccess('playersManualSuccess', message);
+    
+    // Clear editing state
+    currentEditingPlayerName = null;
+    
     document.getElementById('playersList').innerHTML = '';
     playerCount = 0;
     updateStats();
     showUploadedPlayers(team);
+}
+
+// Save to Vercel KV API
+async function saveToVercelKV(team, players) {
+    try {
+        const response = await fetch('/api/admin/players', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ team, players })
+        });
+        
+        if (response.ok) {
+            console.log(`✅ Saved to Vercel KV for team ${team}`);
+        } else {
+            console.warn('Failed to save to Vercel KV:', response.status);
+        }
+    } catch (error) {
+        console.error('Error saving to Vercel KV:', error);
+    }
 }
 
 function showUploadedPlayers(team) {
@@ -145,15 +183,69 @@ function showUploadedPlayers(team) {
     if (!players.length) return container.innerHTML = '<p class="placeholder-text">No players uploaded for this team.</p>';
     
     let html = '';
-    players.forEach(p => {
+    players.forEach((p, index) => {
         const badges = [];
         if (p.isCaptain) badges.push('<span class="badge badge-captain">👑 C</span>');
         if (p.isViceCaptain) badges.push('<span class="badge badge-captain">⭐ VC</span>');
         if (p.isForeign) badges.push('<span class="badge badge-foreign">🌏</span>');
         html += `<div class="player-card"><div class="player-info"><h4>${p.name}</h4><p>${p.role} | Age: ${p.age} | ${p.nationality}</p></div>
-            <div class="player-badges">${badges.join('')}<button class="btn-remove" onclick="deletePlayer('${p.name}')">🗑️</button></div></div>`;
+            <div class="player-badges">${badges.join('')}
+            <button class="btn-edit" onclick="editPlayer(${index})" style="background: linear-gradient(135deg, #00D9FF, #34D9FF); margin-right: 0.5rem;">✏️ Edit</button>
+            <button class="btn-remove" onclick="deletePlayer('${p.name}')">🗑️</button></div></div>`;
     });
     container.innerHTML = html;
+}
+
+// Edit player - populate form with existing data
+let currentEditingPlayerName = null;
+
+function editPlayer(index) {
+    const team = document.getElementById('teamSelectManual').value;
+    const key = `uploaded_${team.toLowerCase()}_players`;
+    let players = JSON.parse(localStorage.getItem(key) || '[]');
+    const player = players[index];
+    
+    if (!player) return;
+    
+    // Store the original name for replacement
+    currentEditingPlayerName = player.name;
+    
+    // Clear existing player rows
+    document.getElementById('playersList').innerHTML = '';
+    playerCount = 0;
+    
+    // Add one row with player data
+    addPlayerRow();
+    
+    // Populate the row with player data
+    const row = document.querySelector('.player-row');
+    if (row) {
+        row.querySelector('.player-name').value = player.name || '';
+        row.querySelector('.player-role').value = player.role || '';
+        row.querySelector('.player-age').value = player.age || '';
+        row.querySelector('.player-nationality').value = player.nationality || '';
+        row.querySelector('.player-batting').value = player['batting style'] || '';
+        row.querySelector('.player-bowling').value = player['bowling style'] || '';
+        row.querySelector('.player-captain').checked = player.isCaptain || false;
+        row.querySelector('.player-vice-captain').checked = player.isViceCaptain || false;
+        
+        const allrounderType = row.querySelector('.player-allrounder-type');
+        if (allrounderType) {
+            allrounderType.value = player['allrounder type'] || '';
+        }
+        
+        // Show/hide allrounder type based on role
+        const allrounderContainer = row.querySelector('.allrounder-type-container');
+        if (allrounderContainer) {
+            allrounderContainer.style.display = player.role === 'All-rounder' ? 'block' : 'none';
+        }
+    }
+    
+    // Scroll to form
+    document.getElementById('playersList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // Show message
+    showSuccess('playersManualSuccess', `Editing ${player.name}. Update the details and click Save.`);
 }
 
 function deletePlayer(name) {

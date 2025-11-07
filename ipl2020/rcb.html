@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/shared-modern.css">
     <link rel="stylesheet" href="css/team-styles.css">
 </head>
-<body>
+<body data-team="RCB">
     <!-- Animated Mesh Background -->
     <div class="mesh-background">
         <div class="mesh-gradient mesh-gradient-1"></div>
@@ -107,7 +107,7 @@
         </div>
     </footer>
 
-    <script src="js/team-page-loader.js"></script>
+    <script src="js/team-page-api-loader.js?v=1.0"></script>
     <script>
     // Scroll effect
     window.addEventListener('scroll', () => {
@@ -125,6 +125,7 @@
         const modalName = document.getElementById('modalPlayerName');
         const modalRole = document.getElementById('modalPlayerRole');
         const modalBadges = document.getElementById('modalPlayerBadges');
+        const modalStats = document.getElementById('modalPlayerStats');
         const modalDetails = document.getElementById('modalPlayerDetails');
 
         // Set basic info
@@ -138,6 +139,13 @@
         if (player.isForeign) badgesHTML += '<span class="modal-badge badge-foreign">🌏 Overseas</span>';
         if ((player.role || '').toLowerCase() === 'wicket-keeper') badgesHTML += '<span class="modal-badge badge-wk">🧤 Wicket-Keeper</span>';
         modalBadges.innerHTML = badgesHTML;
+
+        // Set stats
+        let statsHTML = '';
+        if (player.matches) statsHTML += `<div class="detail-item"><div class="detail-label">Matches</div><div class="detail-value">${player.matches}</div></div>`;
+        if (player.runs) statsHTML += `<div class="detail-item"><div class="detail-label">Runs</div><div class="detail-value">${player.runs}</div></div>`;
+        if (player.wickets) statsHTML += `<div class="detail-item"><div class="detail-label">Wickets</div><div class="detail-value">${player.wickets}</div></div>`;
+        modalStats.innerHTML = statsHTML;
 
         // Set detailed information
         const allrounderType = player['allrounder type'] || player['Allrounder Type'] || '';
