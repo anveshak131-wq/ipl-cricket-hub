@@ -51,47 +51,63 @@ async function loadPlayers() {
         for (const team of IPL_TEAMS) {
             try {
                 const response = await fetch(`${API_BASE}/api/admin/players?team=${team}`);
+                console.log(`Fetching ${team} players:`, response.status);
+                
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(`${team} API response:`, data);
+                    
+                    // Handle different response formats
+                    let teamPlayers = [];
                     if (data.data && Array.isArray(data.data)) {
-                        // Add each player with team info
-                        data.data.forEach(player => {
-                            playersData.push({
-                                id: player.id || `${team}_${player.name}_${Date.now()}`,
-                                name: player.name,
-                                team: team,
-                                role: player.role || 'Player',
-                                jersey: player.jersey || player.number,
-                                photo: player.photo,
-                                stats: {
-                                    matches: player.stats?.matches || 0,
-                                    innings: player.stats?.innings || 0,
-                                    runs: player.stats?.runs || 0,
-                                    battingAvg: player.stats?.battingAvg || 0,
-                                    strikeRate: player.stats?.strikeRate || 0,
-                                    highestScore: player.stats?.highestScore || 0,
-                                    centuries: player.stats?.centuries || 0,
-                                    fifties: player.stats?.fifties || 0,
-                                    sixes: player.stats?.sixes || 0,
-                                    fours: player.stats?.fours || 0,
-                                    wickets: player.stats?.wickets || 0,
-                                    bowlingAvg: player.stats?.bowlingAvg || 0,
-                                    economy: player.stats?.economy || 0,
-                                    bestBowling: player.stats?.bestBowling || '',
-                                    fiveWickets: player.stats?.fiveWickets || 0,
-                                    fourWickets: player.stats?.fourWickets || 0,
-                                    catches: player.stats?.catches || 0,
-                                    stumpings: player.stats?.stumpings || 0,
-                                    runOuts: player.stats?.runOuts || 0
-                                }
-                            });
-                        });
+                        teamPlayers = data.data;
+                    } else if (Array.isArray(data)) {
+                        teamPlayers = data;
                     }
+                    
+                    console.log(`${team} players found:`, teamPlayers.length);
+                    
+                    // Add each player with team info
+                    teamPlayers.forEach(player => {
+                        console.log(`Processing player:`, player);
+                        playersData.push({
+                            id: player.id || `${team}_${player.name}_${Date.now()}`,
+                            name: player.name,
+                            team: team,
+                            role: player.role || player.position || 'Player',
+                            jersey: player.jersey || player.number,
+                            photo: player.photo,
+                            stats: {
+                                matches: player.stats?.matches || 0,
+                                innings: player.stats?.innings || 0,
+                                runs: player.stats?.runs || 0,
+                                battingAvg: player.stats?.battingAvg || 0,
+                                strikeRate: player.stats?.strikeRate || 0,
+                                highestScore: player.stats?.highestScore || 0,
+                                centuries: player.stats?.centuries || 0,
+                                fifties: player.stats?.fifties || 0,
+                                sixes: player.stats?.sixes || 0,
+                                fours: player.stats?.fours || 0,
+                                wickets: player.stats?.wickets || 0,
+                                bowlingAvg: player.stats?.bowlingAvg || 0,
+                                economy: player.stats?.economy || 0,
+                                bestBowling: player.stats?.bestBowling || '',
+                                fiveWickets: player.stats?.fiveWickets || 0,
+                                fourWickets: player.stats?.fourWickets || 0,
+                                catches: player.stats?.catches || 0,
+                                stumpings: player.stats?.stumpings || 0,
+                                runOuts: player.stats?.runOuts || 0
+                            }
+                        });
+                    });
                 }
             } catch (err) {
                 console.warn(`Failed to load ${team} players:`, err);
             }
         }
+        
+        console.log('Total players loaded:', playersData.length);
+        console.log('All players:', playersData);
 
         displayPlayers(playersData);
         updateStats();
