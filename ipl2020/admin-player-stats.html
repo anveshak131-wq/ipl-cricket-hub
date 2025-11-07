@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Statistics Manager - IPL Cricket Hub</title>
+    <link rel="shortcut icon" href="assets/ipl_logo_new.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF4655;
+            --secondary: #00D9FF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #0A0E27;
+            --dark-light: #1A1F3A;
+            --text: #E4E4E7;
+            --text-muted: #A1A1AA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(26, 31, 58, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 45px;
+        }
+
+        .nav-logo span {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #FF6B7A);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #34D399);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--secondary), #34D9FF);
+            color: var(--dark);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 70, 85, 0.3);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(255, 70, 85, 0.1), rgba(0, 217, 255, 0.1));
+            border: 2px solid rgba(255, 70, 85, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 70, 85, 0.3);
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .player-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .player-role {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .stat-label-small {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Side Panel */
+        .side-panel {
+            position: fixed;
+            right: -600px;
+            top: 0;
+            width: 600px;
+            height: 100vh;
+            background: var(--dark-light);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .side-panel.open {
+            right: 0;
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, var(--primary), #FF6B7A);
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .panel-header h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .panel-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .panel-content {
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.show {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .search-bar {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 70, 85, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="admin-upload.html" class="nav-logo">
+                <img src="assets/ipl_logo_new.svg" alt="IPL">
+                <span>Player Statistics Manager</span>
+            </a>
+            <div class="nav-actions">
+                <button class="btn btn-info" onclick="importPlayers()">
+                    <i class="fas fa-cloud-download-alt"></i> Import Players
+                </button>
+                <button class="btn btn-success" onclick="exportPlayers()">
+                    <i class="fas fa-download"></i> Export Data
+                </button>
+                <a href="admin-upload.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-users"></i> Player Statistics Manager</h1>
+            <p>Import players and manage their cricket statistics</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalPlayers">0</div>
+                <div class="stat-label">Total Players</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalBatsmen">0</div>
+                <div class="stat-label">Batsmen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalBowlers">0</div>
+                <div class="stat-label">Bowlers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalAllrounders">0</div>
+                <div class="stat-label">All-Rounders</div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Search players by name..." oninput="filterPlayers()">
+        </div>
+
+        <div class="filter-bar">
+            <select id="filterTeam" onchange="filterPlayers()">
+                <option value="">All Teams</option>
+                <option value="MI">Mumbai Indians</option>
+                <option value="CSK">Chennai Super Kings</option>
+                <option value="RCB">Royal Challengers Bangalore</option>
+                <option value="KKR">Kolkata Knight Riders</option>
+                <option value="DC">Delhi Capitals</option>
+                <option value="SRH">Sunrisers Hyderabad</option>
+                <option value="RR">Rajasthan Royals</option>
+                <option value="PBKS">Punjab Kings</option>
+                <option value="GT">Gujarat Titans</option>
+                <option value="LSG">Lucknow Super Giants</option>
+            </select>
+
+            <select id="filterRole" onchange="filterPlayers()">
+                <option value="">All Roles</option>
+                <option value="Batsman">Batsman</option>
+                <option value="Bowler">Bowler</option>
+                <option value="All-Rounder">All-Rounder</option>
+                <option value="Wicket-Keeper">Wicket-Keeper</option>
+            </select>
+        </div>
+
+        <!-- Players Grid -->
+        <div class="players-grid" id="playersGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading players...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Side Panel for Editing -->
+    <div class="side-panel" id="editPanel">
+        <div class="panel-header">
+            <h2 id="panelPlayerName">Player Name</h2>
+            <p id="panelPlayerRole">Role</p>
+            <button class="panel-close" onclick="closePanel()">×</button>
+        </div>
+
+        <div class="panel-content">
+            <form id="playerStatsForm" onsubmit="savePlayerStats(event)">
+                <!-- Basic Info -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Player Name</label>
+                            <input type="text" id="editName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Team</label>
+                            <select id="editTeam" required>
+                                <option value="MI">Mumbai Indians</option>
+                                <option value="CSK">Chennai Super Kings</option>
+                                <option value="RCB">Royal Challengers Bangalore</option>
+                                <option value="KKR">Kolkata Knight Riders</option>
+                                <option value="DC">Delhi Capitals</option>
+                                <option value="SRH">Sunrisers Hyderabad</option>
+                                <option value="RR">Rajasthan Royals</option>
+                                <option value="PBKS">Punjab Kings</option>
+                                <option value="GT">Gujarat Titans</option>
+                                <option value="LSG">Lucknow Super Giants</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select id="editRole" required>
+                                <option value="Batsman">Batsman</option>
+                                <option value="Bowler">Bowler</option>
+                                <option value="All-Rounder">All-Rounder</option>
+                                <option value="Wicket-Keeper">Wicket-Keeper</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Jersey Number</label>
+                            <input type="number" id="editJersey" min="0" max="99">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batting Stats -->
+                <div class="form-section">
+                    <h3><i class="fas fa-baseball-ball"></i> Batting Statistics</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Matches Played</label>
+                            <input type="number" id="editMatches" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Innings</label>
+                            <input type="number" id="editInnings" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Runs</label>
+                            <input type="number" id="editRuns" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Batting Average</label>
+                            <input type="number" id="editBattingAvg" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Strike Rate</label>
+                            <input type="number" id="editStrikeRate" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Highest Score</label>
+                            <input type="number" id="editHighestScore" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Centuries (100s)</label>
+                            <input type="number" id="editCenturies" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Half-Centuries (50s)</label>
+                            <input type="number" id="editFifties" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Sixes (6s)</label>
+                            <input type="number" id="editSixes" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Fours (4s)</label>
+                            <input type="number" id="editFours" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bowling Stats -->
+                <div class="form-section">
+                    <h3><i class="fas fa-dot-circle"></i> Bowling Statistics</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Total Wickets</label>
+                            <input type="number" id="editWickets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Bowling Average</label>
+                            <input type="number" id="editBowlingAvg" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Economy Rate</label>
+                            <input type="number" id="editEconomy" step="0.01" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Best Bowling</label>
+                            <input type="text" id="editBestBowling" placeholder="e.g., 4/20">
+                        </div>
+                        <div class="form-group">
+                            <label>5-Wicket Hauls</label>
+                            <input type="number" id="editFiveWickets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>4-Wicket Hauls</label>
+                            <input type="number" id="editFourWickets" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fielding Stats -->
+                <div class="form-section">
+                    <h3><i class="fas fa-hand-paper"></i> Fielding Statistics</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Catches</label>
+                            <input type="number" id="editCatches" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Stumpings</label>
+                            <input type="number" id="editStumpings" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Run Outs</label>
+                            <input type="number" id="editRunOuts" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="editPlayerId">
+
+                <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-save"></i> Save Statistics
+                </button>
+
+                <button type="button" class="btn btn-danger" onclick="deletePlayer()" style="width: 100%; margin-top: 1rem; background: linear-gradient(135deg, var(--danger), #EF4444);">
+                    <i class="fas fa-trash"></i> Delete Player
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="js/player-stats-manager.js"></script>
+</body>
+</html>
