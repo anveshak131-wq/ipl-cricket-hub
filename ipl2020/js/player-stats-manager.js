@@ -29,6 +29,8 @@ const IPL_TEAMS = ['MI', 'CSK', 'RCB', 'KKR', 'DC', 'SRH', 'RR', 'PBKS', 'GT', '
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Clear any old localStorage cache
+    localStorage.removeItem('player_stats_data');
     loadPlayers();
 });
 
