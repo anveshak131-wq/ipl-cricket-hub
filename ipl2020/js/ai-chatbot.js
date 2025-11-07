@@ -65,16 +65,16 @@ class IPLChatbot {
 
                 <div class="chatbot-quick-actions" id="quickActions">
                     <button class="quick-btn" onclick="iplChatbot.sendQuickMessage('Predict MI vs CSK')">
-                        <span class="quick-emoji">🔮</span> Predict Match
+                        <span class="quick-emoji" style="font-size: 1.3rem; margin-right: 0.3rem;">🔮</span> Predict Match
                     </button>
                     <button class="quick-btn" onclick="iplChatbot.sendQuickMessage('Show points table')">
-                        <span class="quick-emoji">🏆</span> Points Table
+                        <span class="quick-emoji" style="font-size: 1.3rem; margin-right: 0.3rem;">🏆</span> Points Table
                     </button>
                     <button class="quick-btn" onclick="iplChatbot.sendQuickMessage('Show me fixtures')">
-                        <span class="quick-emoji">📅</span> Fixtures
+                        <span class="quick-emoji" style="font-size: 1.3rem; margin-right: 0.3rem;">📅</span> Fixtures
                     </button>
                     <button class="quick-btn" onclick="iplChatbot.sendQuickMessage('Tell me about IPL teams')">
-                        <span class="quick-emoji">👥</span> Teams Info
+                        <span class="quick-emoji" style="font-size: 1.3rem; margin-right: 0.3rem;">👥</span> Teams Info
                     </button>
                 </div>
 
