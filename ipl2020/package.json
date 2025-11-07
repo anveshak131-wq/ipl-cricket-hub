@@ -1,0 +1,17 @@
+{
+  "name": "ipl-cricket-hub",
+  "version": "2.0.0",
+  "description": "IPL Cricket Hub with Vercel Serverless Functions",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}
