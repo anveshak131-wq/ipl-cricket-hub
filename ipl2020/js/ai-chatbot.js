@@ -28,7 +28,7 @@ class IPLChatbot {
         const chatHTML = `
             <!-- Chatbot Button -->
             <div id="chatbot-button" class="chatbot-button" title="Chat with IPL Assistant">
-                <i class="fas fa-comments"></i>
+                <span style="font-size: 1.5rem;">💬</span>
                 <span class="chat-badge" id="chatBadge">1</span>
             </div>
 
@@ -37,7 +37,7 @@ class IPLChatbot {
                 <div class="chatbot-header">
                     <div class="chatbot-header-left">
                         <div class="chatbot-avatar">
-                            <i class="fas fa-robot"></i>
+                            <span style="font-size: 1.5rem;">🤖</span>
                         </div>
                         <div class="chatbot-info">
                             <h3>IPL Assistant</h3>
@@ -48,13 +48,13 @@ class IPLChatbot {
                     </div>
                     <div class="chatbot-header-right">
                         <button class="chatbot-btn" onclick="iplChatbot.minimizeChat()" title="Minimize">
-                            <i class="fas fa-minus"></i>
+                            <span style="font-size: 1.1rem;">➖</span>
                         </button>
                         <button class="chatbot-btn" onclick="iplChatbot.clearChat()" title="Clear Chat">
-                            <i class="fas fa-trash"></i>
+                            <span style="font-size: 1.1rem;">🗑️</span>
                         </button>
                         <button class="chatbot-btn" onclick="iplChatbot.closeChat()" title="Close">
-                            <i class="fas fa-times"></i>
+                            <span style="font-size: 1.1rem;">✖️</span>
                         </button>
                     </div>
                 </div>
@@ -86,7 +86,7 @@ class IPLChatbot {
 
                 <div class="chatbot-input">
                     <button class="chatbot-attach" onclick="iplChatbot.showOptions()" title="Options">
-                        <i class="fas fa-paperclip"></i>
+                        <span style="font-size: 1.1rem;">📎</span>
                     </button>
                     <input 
                         type="text" 
@@ -95,7 +95,7 @@ class IPLChatbot {
                         onkeypress="if(event.key==='Enter') iplChatbot.sendMessage()"
                     />
                     <button class="chatbot-send" onclick="iplChatbot.sendMessage()">
-                        <i class="fas fa-paper-plane"></i>
+                        <span style="font-size: 1.1rem;">📤</span>
                     </button>
                 </div>
 
@@ -405,7 +405,7 @@ What would you like to know?`;
 
         messageDiv.innerHTML = `
             <div class="message-content">
-                ${sender === 'bot' ? '<i class="fas fa-robot message-icon"></i>' : ''}
+                ${sender === 'bot' ? '<span class="message-icon" style="font-size: 1.2rem;">🤖</span>' : ''}
                 <div class="message-text">${parsedText.replace(/\n/g, '<br>')}</div>
             </div>
             <div class="message-time">${time}</div>
