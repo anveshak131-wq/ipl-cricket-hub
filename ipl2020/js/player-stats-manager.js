@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPlayers();
 });
 
-// Load players from localStorage (same source as admin-upload page)
+// Load players from Vercel KV API
 async function loadPlayers() {
     const grid = document.getElementById('playersGrid');
     grid.innerHTML = `
@@ -47,64 +47,73 @@ async function loadPlayers() {
     try {
         playersData = [];
         
-        // Load players from localStorage (same keys as admin-upload uses)
+        // Load players from Vercel KV API for all teams
         for (const team of IPL_TEAMS) {
             try {
-                // admin-upload stores with key pattern: uploaded_rcb_players, uploaded_mi_players, etc.
-                const key = `uploaded_${team.toLowerCase()}_players`;
-                const stored = localStorage.getItem(key);
+                console.log(`Fetching ${team} players from API...`);
+                const response = await fetch(`${API_BASE}/api/admin/players?team=${team}`);
                 
-                console.log(`Loading ${team} from key: ${key}`);
+                console.log(`${team} response status:`, response.status);
                 
-                if (stored) {
-                    const teamPlayers = JSON.parse(stored);
-                    console.log(`${team} players found:`, teamPlayers.length, teamPlayers);
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log(`${team} API result:`, result);
                     
-                    // Add each player with team info
-                    teamPlayers.forEach(player => {
-                        if (player.name) {
-                            playersData.push({
-                                id: `${team}_${player.name}`,
-                                name: player.name,
-                                team: team,
-                                role: player.role || 'Player',
-                                jersey: null,
-                                photo: player.image,
-                                age: player.age,
-                                nationality: player.nationality,
-                                battingStyle: player['batting style'],
-                                bowlingStyle: player['bowling style'],
-                                allrounderType: player['allrounder type'],
-                                isCaptain: player.isCaptain,
-                                isViceCaptain: player.isViceCaptain,
-                                isForeign: player.isForeign,
-                                stats: {
-                                    matches: player.stats?.matches || 0,
-                                    innings: player.stats?.innings || 0,
-                                    runs: player.stats?.runs || 0,
-                                    battingAvg: player.stats?.battingAvg || 0,
-                                    strikeRate: player.stats?.strikeRate || 0,
-                                    highestScore: player.stats?.highestScore || 0,
-                                    centuries: player.stats?.centuries || 0,
-                                    fifties: player.stats?.fifties || 0,
-                                    sixes: player.stats?.sixes || 0,
-                                    fours: player.stats?.fours || 0,
-                                    wickets: player.stats?.wickets || 0,
-                                    bowlingAvg: player.stats?.bowlingAvg || 0,
-                                    economy: player.stats?.economy || 0,
-                                    bestBowling: player.stats?.bestBowling || '',
-                                    fiveWickets: player.stats?.fiveWickets || 0,
-                                    fourWickets: player.stats?.fourWickets || 0,
-                                    catches: player.stats?.catches || 0,
-                                    stumpings: player.stats?.stumpings || 0,
-                                    runOuts: player.stats?.runOuts || 0
-                                }
-                            });
-                        }
-                    });
+                    const teamPlayers = result.data || result || [];
+                    
+                    if (Array.isArray(teamPlayers) && teamPlayers.length > 0) {
+                        console.log(`${team} players found:`, teamPlayers.length);
+                        
+                        // Add each player with team info
+                        teamPlayers.forEach(player => {
+                            if (player.name) {
+                                playersData.push({
+                                    id: `${team}_${player.name}`,
+                                    name: player.name,
+                                    team: team,
+                                    role: player.role || player.position || 'Player',
+                                    jersey: player.number || player.jersey,
+                                    photo: player.photo || player.image,
+                                    age: player.age,
+                                    nationality: player.nationality,
+                                    battingStyle: player['batting style'] || player.battingStyle,
+                                    bowlingStyle: player['bowling style'] || player.bowlingStyle,
+                                    allrounderType: player['allrounder type'] || player.allrounderType,
+                                    isCaptain: player.isCaptain,
+                                    isViceCaptain: player.isViceCaptain,
+                                    isForeign: player.isForeign,
+                                    stats: {
+                                        matches: player.stats?.matches || 0,
+                                        innings: player.stats?.innings || 0,
+                                        runs: player.stats?.runs || 0,
+                                        battingAvg: player.stats?.battingAvg || 0,
+                                        strikeRate: player.stats?.strikeRate || 0,
+                                        highestScore: player.stats?.highestScore || 0,
+                                        centuries: player.stats?.centuries || 0,
+                                        fifties: player.stats?.fifties || 0,
+                                        sixes: player.stats?.sixes || 0,
+                                        fours: player.stats?.fours || 0,
+                                        wickets: player.stats?.wickets || 0,
+                                        bowlingAvg: player.stats?.bowlingAvg || 0,
+                                        economy: player.stats?.economy || 0,
+                                        bestBowling: player.stats?.bestBowling || '',
+                                        fiveWickets: player.stats?.fiveWickets || 0,
+                                        fourWickets: player.stats?.fourWickets || 0,
+                                        catches: player.stats?.catches || 0,
+                                        stumpings: player.stats?.stumpings || 0,
+                                        runOuts: player.stats?.runOuts || 0
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        console.log(`${team} has no players`);
+                    }
+                } else {
+                    console.warn(`${team} request failed:`, response.status);
                 }
             } catch (err) {
-                console.warn(`Failed to load ${team} players:`, err);
+                console.error(`Failed to load ${team} players:`, err);
             }
         }
         
@@ -273,12 +282,14 @@ async function savePlayerStats(event) {
     };
 
     try {
-        // Get all players for this team from localStorage
-        const key = `uploaded_${team.toLowerCase()}_players`;
+        // Get all players for this team from Vercel KV API
+        const response = await fetch(`${API_BASE}/api/admin/players?team=${team}`);
         let teamPlayers = [];
-        try {
-            teamPlayers = JSON.parse(localStorage.getItem(key) || '[]');
-        } catch (e) {}
+        
+        if (response.ok) {
+            const result = await response.json();
+            teamPlayers = result.data || result || [];
+        }
 
         // Update the player in the team array
         const index = teamPlayers.findIndex(p => p.name === player.name);
@@ -290,8 +301,16 @@ async function savePlayerStats(event) {
             };
         }
 
-        // Save back to localStorage
-        localStorage.setItem(key, JSON.stringify(teamPlayers));
+        // Save back to Vercel KV API
+        const saveResponse = await fetch(`${API_BASE}/api/admin/players`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ team, players: teamPlayers })
+        });
+
+        if (!saveResponse.ok) {
+            throw new Error('Failed to save to API');
+        }
 
         // Update local data
         playersData[playerIndex] = updatedPlayer;
@@ -323,18 +342,28 @@ async function deletePlayer() {
     const team = player.team;
 
     try {
-        // Get all players for this team from localStorage
-        const key = `uploaded_${team.toLowerCase()}_players`;
+        // Get all players for this team from Vercel KV API
+        const response = await fetch(`${API_BASE}/api/admin/players?team=${team}`);
         let teamPlayers = [];
-        try {
-            teamPlayers = JSON.parse(localStorage.getItem(key) || '[]');
-        } catch (e) {}
+        
+        if (response.ok) {
+            const result = await response.json();
+            teamPlayers = result.data || result || [];
+        }
 
         // Remove the player from the team array
         teamPlayers = teamPlayers.filter(p => p.name !== player.name);
 
-        // Save back to localStorage
-        localStorage.setItem(key, JSON.stringify(teamPlayers));
+        // Save back to Vercel KV API
+        const saveResponse = await fetch(`${API_BASE}/api/admin/players`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ team, players: teamPlayers })
+        });
+
+        if (!saveResponse.ok) {
+            throw new Error('Failed to delete from API');
+        }
 
         // Remove from local data
         playersData = playersData.filter(p => p.id !== player.id);
