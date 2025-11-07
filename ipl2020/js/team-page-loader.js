@@ -53,6 +53,35 @@ async function loadTeamPlayers(teamCode) {
         }
     }
     
+    // Try to load from admin API (player stats endpoint)
+    if (players.length === 0) {
+        try {
+            const adminResponse = await fetch(`/api/admin/players?team=${teamCode.toUpperCase()}`);
+            if (adminResponse.ok) {
+                const result = await adminResponse.json();
+                const apiPlayers = result.data || result || [];
+                if (Array.isArray(apiPlayers) && apiPlayers.length > 0) {
+                    players = apiPlayers.map(p => ({
+                        name: p.name,
+                        role: p.role || p.position,
+                        age: p.age,
+                        nationality: p.nationality,
+                        isForeign: p.isForeign,
+                        isCaptain: p.isCaptain,
+                        isViceCaptain: p.isViceCaptain,
+                        'batting style': p.battingStyle || p['batting style'],
+                        'bowling style': p.bowlingStyle || p['bowling style'],
+                        'allrounder type': p.allrounderType || p['allrounder type'],
+                        stats: p.stats
+                    }));
+                    console.log(`📊 Loaded ${players.length} players from admin API`);
+                }
+            }
+        } catch (e) {
+            console.warn('Admin API not available:', e.message);
+        }
+    }
+    
     // Display players or show message
     if (players.length > 0) {
         displayPlayers(players, teamCode);
