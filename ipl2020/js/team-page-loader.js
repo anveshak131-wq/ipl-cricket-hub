@@ -23,63 +23,42 @@ async function loadTeamPlayers(teamCode) {
     
     let players = [];
     
-    // Try to fetch from backend API first
+    // Load from Vercel Storage (Admin API) - PRIMARY SOURCE
     try {
-        const response = await fetch(`${BACKEND_API_URL}/api/players/${teamCode}`);
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.players && data.players.length > 0) {
-                players = data.players;
-                console.log(`✅ Loaded ${players.length} players from backend API`);
-                
-                // Save to localStorage for offline access
-                localStorage.setItem(storageKey, JSON.stringify(players));
+        console.log(`🔄 Fetching ${teamCode.toUpperCase()} players from Vercel Storage...`);
+        const adminResponse = await fetch(`/api/admin/players?team=${teamCode.toUpperCase()}`);
+        console.log(`API Response Status:`, adminResponse.status);
+        
+        if (adminResponse.ok) {
+            const result = await adminResponse.json();
+            console.log(`API Response:`, result);
+            
+            const apiPlayers = result.data || result || [];
+            if (Array.isArray(apiPlayers) && apiPlayers.length > 0) {
+                players = apiPlayers.map(p => ({
+                    name: p.name,
+                    role: p.role || p.position,
+                    age: p.age,
+                    nationality: p.nationality,
+                    isForeign: p.isForeign,
+                    isCaptain: p.isCaptain,
+                    isViceCaptain: p.isViceCaptain,
+                    'batting style': p.battingStyle || p['batting style'],
+                    'bowling style': p.bowlingStyle || p['bowling style'],
+                    'allrounder type': p.allrounderType || p['allrounder type'],
+                    stats: p.stats,
+                    jersey: p.jersey,
+                    photo: p.photo
+                }));
+                console.log(`✅ Loaded ${players.length} players from Vercel Storage`);
+            } else {
+                console.warn(`⚠️ No players found in API response for ${teamCode.toUpperCase()}`);
             }
+        } else {
+            console.error(`❌ API Error: ${adminResponse.status} ${adminResponse.statusText}`);
         }
-    } catch (error) {
-        console.warn('Backend API not available, falling back to localStorage:', error.message);
-    }
-    
-    // Fallback to localStorage if backend failed
-    if (players.length === 0) {
-        const localData = localStorage.getItem(storageKey);
-        if (localData) {
-            try {
-                players = JSON.parse(localData);
-                console.log(`📦 Loaded ${players.length} players from localStorage`);
-            } catch (e) {
-                console.error('Error parsing localStorage data:', e);
-            }
-        }
-    }
-    
-    // Try to load from admin API (player stats endpoint)
-    if (players.length === 0) {
-        try {
-            const adminResponse = await fetch(`/api/admin/players?team=${teamCode.toUpperCase()}`);
-            if (adminResponse.ok) {
-                const result = await adminResponse.json();
-                const apiPlayers = result.data || result || [];
-                if (Array.isArray(apiPlayers) && apiPlayers.length > 0) {
-                    players = apiPlayers.map(p => ({
-                        name: p.name,
-                        role: p.role || p.position,
-                        age: p.age,
-                        nationality: p.nationality,
-                        isForeign: p.isForeign,
-                        isCaptain: p.isCaptain,
-                        isViceCaptain: p.isViceCaptain,
-                        'batting style': p.battingStyle || p['batting style'],
-                        'bowling style': p.bowlingStyle || p['bowling style'],
-                        'allrounder type': p.allrounderType || p['allrounder type'],
-                        stats: p.stats
-                    }));
-                    console.log(`📊 Loaded ${players.length} players from admin API`);
-                }
-            }
-        } catch (e) {
-            console.warn('Admin API not available:', e.message);
-        }
+    } catch (e) {
+        console.error('❌ Failed to fetch from Vercel Storage:', e);
     }
     
     // Display players or show message
